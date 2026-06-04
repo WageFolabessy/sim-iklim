@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\ClimateRecord;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class ClimateRecordSeeder extends Seeder
@@ -14,32 +15,24 @@ class ClimateRecordSeeder extends Seeder
     public function run(): void
     {
         $pengamatId = User::where('role', 'pengamat')->value('id') ?? 1;
+        $records = [];
+        $now = Carbon::now()->startOfDay();
 
-        ClimateRecord::create([
-            'user_id' => $pengamatId,
-            'recorded_at' => now()->subDays(2),
-            'temperature' => 31.4,
-            'humidity' => 78,
-            'rainfall' => 12.3,
-            'wind_speed' => 8.4,
-        ]);
+        for ($i = 365; $i >= 0; $i--) {
+            $records[] = [
+                'user_id' => $pengamatId,
+                'recorded_at' => (clone $now)->subDays($i)->format('Y-m-d'),
+                'temperature' => round(rand(260, 350) / 10, 2),
+                'humidity' => rand(65, 100),
+                'rainfall' => rand(1, 10) > 7 ? round(rand(10, 1000) / 10, 2) : 0,
+                'wind_speed' => round(rand(20, 200) / 10, 2),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
 
-        ClimateRecord::create([
-            'user_id' => $pengamatId,
-            'recorded_at' => now()->subDays(1),
-            'temperature' => 32.9,
-            'humidity' => 86,
-            'rainfall' => 0,
-            'wind_speed' => 5.2,
-        ]);
-
-        ClimateRecord::create([
-            'user_id' => $pengamatId,
-            'recorded_at' => now(),
-            'temperature' => 29.8,
-            'humidity' => 90,
-            'rainfall' => 45.5,
-            'wind_speed' => 12.1,
-        ]);
+        foreach (array_chunk($records, 100) as $chunk) {
+            ClimateRecord::insert($chunk);
+        }
     }
 }

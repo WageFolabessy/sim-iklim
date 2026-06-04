@@ -115,16 +115,18 @@
             </div>
             
             @php
-                $maxRain = max($rainData) > 0 ? max($rainData) : 1;
+                $maxRain = !empty($rainData) ? max($rainData) : 1;
+                $maxRain = $maxRain > 0 ? $maxRain : 1; // absolute fallback
+                $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
             @endphp
             
             <div class="mt-6 flex h-56 items-end gap-2">
                 @foreach($rainData as $index => $v)
-                    <div class="group flex flex-1 flex-col items-center gap-2">
+                    <div class="group flex h-full flex-1 flex-col items-center gap-2">
                         <div class="relative w-full flex-1">
                             <div
                                 class="absolute bottom-0 w-full rounded-t-md bg-gradient-sky transition group-hover:opacity-80"
-                                style="height: {{ ($v / $maxRain) * 100 }}%"
+                                style="height: {{ ($v / $maxRain) * 100 }}%;"
                                 title="{{ $v }} mm"
                             ></div>
                         </div>

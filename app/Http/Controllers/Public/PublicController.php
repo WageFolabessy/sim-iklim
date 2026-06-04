@@ -54,7 +54,8 @@ class PublicController extends Controller
 
         $monthlyRainfall = ClimateRecord::selectRaw('MONTH(recorded_at) as month, AVG(rainfall) as avg_rain')
             ->groupBy('month')
-            ->pluck('avg_rain', 'month');
+            ->pluck('avg_rain', 'month')
+            ->toArray();
 
         $rainData = [];
         for ($i = 1; $i <= 12; $i++) {

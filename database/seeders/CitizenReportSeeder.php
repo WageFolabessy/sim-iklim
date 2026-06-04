@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\CitizenReport;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 
 class CitizenReportSeeder extends Seeder
 {
@@ -12,22 +14,41 @@ class CitizenReportSeeder extends Seeder
      */
     public function run(): void
     {
-        CitizenReport::create([
-            'anomaly_type' => 'flood',
-            'location' => 'Jl. Ahmad Yani, Pontianak Selatan',
-            'description' => 'Air menggenang setinggi 30cm, lalu lintas tersendat.',
-        ]);
+        $locations = [
+            'Pontianak Selatan', 'Sintang Kota', 'Kapuas Hulu',
+            'Sungai Pinyuh', 'Singkawang', 'Ketapang', 'Sambas',
+            'Mempawah', 'Kubu Raya', 'Sanggau', 'Bengkayang',
+        ];
 
-        CitizenReport::create([
-            'anomaly_type' => 'strong_wind',
-            'location' => 'Sungai Raya, Kubu Raya',
-            'description' => 'Atap kanopi warga terbang, beberapa dahan pohon patah.',
-        ]);
+        $descriptions = [
+            'Air sungai meluap menggenangi jalan raya hingga 30cm.',
+            'Pohon tumbang menghalangi lalu lintas utama.',
+            'Hujan sangat deras disertai petir, jarak pandang terbatas.',
+            'Kekeringan parah membuat sumur warga mulai surut.',
+            'Angin kencang merusak beberapa atap rumah warga.',
+            'Banjir bandang menerjang perumahan warga di bantaran sungai.',
+            'Hujan badai mengakibatkan atap sekolah rusak.',
+            'Cuaca sangat panas, rawan terjadi kebakaran lahan gambut.',
+            'Angin puting beliung terpantau di daerah pesisir pantai.',
+        ];
 
-        \App\Models\CitizenReport::create([
-            'anomaly_type' => 'other',
-            'location' => 'Jl. Adisucipto Km 8',
-            'description' => 'Jarak pandang sangat terbatas, hujan turun sangat deras sejak jam 2 siang.'
-        ]);
+        $anomalies = [
+            'flood', 'drought', 'strong_wind', 'other',
+        ];
+
+        $records = [];
+        for ($i = 0; $i < 50; $i++) {
+            $records[] = [
+                'anomaly_type' => Arr::random($anomalies),
+                'location' => Arr::random($locations),
+                'description' => Arr::random($descriptions),
+                'created_at' => Carbon::now()->subDays(rand(1, 30))->subMinutes(rand(1, 1440)),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+
+        foreach (array_chunk($records, 100) as $chunk) {
+            CitizenReport::insert($chunk);
+        }
     }
 }
