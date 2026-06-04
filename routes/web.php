@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/data-iklim', [PublicController::class, 'climateData'])->name('climate-data');
+Route::get('/laporkan', [PublicController::class, 'laporkan'])->name('laporkan');
+Route::get('/peringatan', [PublicController::class, 'peringatan'])->name('peringatan');
 Route::post('/laporan-warga', [PublicController::class, 'storeCitizenReport'])->name('citizen-reports.store');
 Route::view('/offline', 'offline')->name('offline');
 

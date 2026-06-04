@@ -22,7 +22,7 @@
                     Data resmi PMG untuk petani, nelayan, dan masyarakat. Pantau cuaca terkini, dapatkan peringatan dini, dan laporkan kondisi di sekitarmu.
                 </p>
                 <div class="mt-7 flex flex-wrap gap-3">
-                    <a href="#lapor" class="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-primary shadow-glow transition hover:bg-white/95">
+                    <a href="{{ route('laporkan') }}" class="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-primary shadow-glow transition hover:bg-white/95">
                         Kirim Laporan Cuaca
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </a>
@@ -79,136 +79,158 @@
     </div>
 </section>
 
-{{-- LAPORKAN CUACA --}}
-<section id="lapor" class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-    <div class="mb-8 text-center sm:text-left text-foreground">
-        <h2 class="font-display text-2xl font-bold sm:text-3xl">Lapor Cuaca Warga</h2>
-        <p class="mt-2 text-sm text-muted-foreground">
-            Laporan Anda sangat berarti bagi warga Kalimantan Barat.
-        </p>
-    </div>
-
-    <form method="POST" action="{{ route('citizen-reports.store') }}" novalidate class="rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
-        @csrf
-
-        {{-- Anomaly Type (Radio Cards) --}}
-        <div>
-            <label class="text-sm font-semibold text-foreground">Jenis anomali cuaca <span class="text-destructive">*</span></label>
-            <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                {{-- Banjir --}}
-                <label class="cursor-pointer relative">
-                    <input type="radio" name="anomaly_type" value="flood" class="peer sr-only" {{ old('anomaly_type') === 'flood' ? 'checked' : '' }} required>
-                    <div class="flex flex-col items-center gap-2 rounded-xl border border-border bg-background p-4 text-xs font-semibold text-muted-foreground transition peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:shadow-glow hover:border-primary/40 hover:text-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
-                        Banjir
-                    </div>
-                </label>
-                {{-- Kekeringan --}}
-                <label class="cursor-pointer relative">
-                    <input type="radio" name="anomaly_type" value="drought" class="peer sr-only" {{ old('anomaly_type') === 'drought' ? 'checked' : '' }}>
-                    <div class="flex flex-col items-center gap-2 rounded-xl border border-border bg-background p-4 text-xs font-semibold text-muted-foreground transition peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:shadow-glow hover:border-primary/40 hover:text-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-                        Kekeringan
-                    </div>
-                </label>
-                {{-- Angin Kencang --}}
-                <label class="cursor-pointer relative">
-                    <input type="radio" name="anomaly_type" value="strong_wind" class="peer sr-only" {{ old('anomaly_type') === 'strong_wind' ? 'checked' : '' }}>
-                    <div class="flex flex-col items-center gap-2 rounded-xl border border-border bg-background p-4 text-xs font-semibold text-muted-foreground transition peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:shadow-glow hover:border-primary/40 hover:text-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>
-                        Angin Kencang
-                    </div>
-                </label>
-                {{-- Hujan Lebat (other) --}}
-                <label class="cursor-pointer relative">
-                    <input type="radio" name="anomaly_type" value="other" class="peer sr-only" {{ old('anomaly_type') === 'other' ? 'checked' : '' }}>
-                    <div class="flex flex-col items-center gap-2 rounded-xl border border-border bg-background p-4 text-xs font-semibold text-muted-foreground transition peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:shadow-glow hover:border-primary/40 hover:text-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>
-                        Hujan Lebat
-                    </div>
-                </label>
+    {{-- Active alerts banner --}}
+    @if($activeAlerts->isNotEmpty())
+    <section class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="-mt-6 rounded-xl border border-warning/40 bg-gradient-warn p-4 text-warning-foreground shadow-card sm:p-5">
+            <div class="flex flex-wrap items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                <div class="flex-1">
+                    <div class="text-sm font-bold">{{ $activeAlerts->count() }} Peringatan Aktif di Kalimantan Barat</div>
+                    <div class="text-xs opacity-80">{{ Str::limit($activeAlerts->first()->title, 50) }}</div>
+                </div>
+                <a href="{{ route('peringatan') }}" class="rounded-lg bg-foreground/10 px-3 py-1.5 text-xs font-semibold backdrop-blur hover:bg-foreground/20">
+                    Lihat detail &rarr;
+                </a>
             </div>
-            @error('anomaly_type')
-                <div class="mt-1.5 text-xs text-destructive">{{ $message }}</div>
-            @enderror
         </div>
+    </section>
+    @endif
 
-        {{-- Lokasi --}}
-        <div class="mt-6">
-            <label htmlFor="location" class="text-sm font-semibold text-foreground">Lokasi kejadian <span class="text-destructive">*</span></label>
-            <div class="relative mt-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-                <input
-                    id="location"
-                    name="location"
-                    value="{{ old('location') }}"
-                    required
-                    placeholder="Contoh: Jl. Adisucipto Km 8, Sungai Raya"
-                    @class([
-                        'w-full rounded-lg border bg-background py-2.5 pl-10 pr-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-ring/30 transition',
-                        'border-destructive focus:border-destructive' => $errors->has('location'),
-                        'border-input focus:border-primary' => !$errors->has('location'),
-                    ])
-                />
+    {{-- Station grid --}}
+    <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+        <div class="flex items-end justify-between">
+            <div>
+                <h2 class="font-display text-2xl font-bold sm:text-3xl">Stasiun di Kalimantan Barat</h2>
+                <p class="mt-1 text-sm text-muted-foreground">Pantauan dari 6 stasiun PMG aktif</p>
             </div>
-            @error('location')
-                <div class="mt-1.5 text-xs text-destructive">{{ $message }}</div>
-            @enderror
+            <a href="{{ route('climate-data') }}" class="hidden text-sm font-semibold text-primary hover:underline sm:block">
+                Statistik lengkap &rarr;
+            </a>
         </div>
-
-        {{-- Nama --}}
-        <div class="mt-6">
-            <label htmlFor="reporter_name" class="text-sm font-semibold text-foreground">Nama (opsional)</label>
-            <input
-                id="reporter_name"
-                name="reporter_name"
-                value="{{ old('reporter_name') }}"
-                placeholder="Nama atau biarkan kosong untuk anonim"
-                @class([
-                    'mt-2 w-full rounded-lg border bg-background px-3 py-2.5 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-ring/30 transition',
-                    'border-destructive focus:border-destructive' => $errors->has('reporter_name'),
-                    'border-input focus:border-primary' => !$errors->has('reporter_name'),
-                ])
-            />
-            @error('reporter_name')
-                <div class="mt-1.5 text-xs text-destructive">{{ $message }}</div>
-            @enderror
+        
+        @php
+            $stations = [
+                ['name' => 'Supadio Pontianak', 'temp' => '32.4', 'rain' => '12.5', 'status' => 'normal'],
+                ['name' => 'Rahadi Oesman Ketapang', 'temp' => '33.1', 'rain' => '45.2', 'status' => 'waspada'],
+                ['name' => 'Tebelian Sintang', 'temp' => '34.2', 'rain' => '0.0', 'status' => 'waspada'],
+                ['name' => 'Susilo Sintang', 'temp' => '33.8', 'rain' => '2.1', 'status' => 'normal'],
+                ['name' => 'Pangsuma Kapuas Hulu', 'temp' => '31.5', 'rain' => '18.4', 'status' => 'normal'],
+                ['name' => 'Paloh Sambas', 'temp' => '32.1', 'rain' => '5.0', 'status' => 'normal'],
+            ];
+        @endphp
+        
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach($stations as $s)
+                <div class="group rounded-xl border border-border bg-card p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-glow">
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-primary"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> {{ $s['name'] }}
+                        </div>
+                        <span class="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider {{ $s['status'] === 'waspada' ? 'bg-warning/20 text-warning-foreground' : 'bg-success/15 text-success' }}">
+                            {{ $s['status'] }}
+                        </span>
+                    </div>
+                    <div class="mt-4 flex items-end justify-between">
+                        <div>
+                            <div class="text-xs text-muted-foreground">Suhu</div>
+                            <div class="font-display text-3xl font-bold">{{ $s['temp'] }}&deg;<span class="text-base text-muted-foreground">C</span></div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-muted-foreground">Curah hujan</div>
+                            <div class="inline-flex items-center gap-1 font-semibold text-info">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg> {{ $s['rain'] }} mm
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
+    </section>
 
-        {{-- Deskripsi --}}
-        <div class="mt-6">
-            <label htmlFor="description" class="text-sm font-semibold text-foreground">Deskripsi singkat <span class="text-destructive">*</span></label>
-            <textarea
-                id="description"
-                name="description"
-                required
-                rows="4"
-                maxlength="500"
-                placeholder="Ceritakan kondisi yang kamu lihat: ketinggian air, durasi hujan, dampak, dll."
-                @class([
-                    'mt-2 w-full resize-none rounded-lg border bg-background px-3 py-2.5 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-ring/30 transition',
-                    'border-destructive focus:border-destructive' => $errors->has('description'),
-                    'border-input focus:border-primary' => !$errors->has('description'),
-                ])
-            >{{ old('description') }}</textarea>
-            @error('description')
-                <div class="mt-1.5 text-xs text-destructive">{{ $message }}</div>
-            @else
-                <div class="mt-1 text-right text-[11px] text-muted-foreground">Maks 500 karakter</div>
-            @enderror
+    {{-- Features grid --}}
+    <section class="bg-surface py-16">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6">
+            <h2 class="font-display text-2xl font-bold sm:text-3xl">Untuk siapa portal ini?</h2>
+            <p class="mt-1 max-w-2xl text-sm text-muted-foreground">
+                Informasi iklim yang ringan, cepat, dan bisa diakses meski sinyal lemah &mdash; dirancang untuk kondisi nyata di lapangan.
+            </p>
+            
+            @php
+                $features = [
+                    ['title' => 'Petani', 'desc' => 'Jadwal tanam, prakiraan hujan, dan peringatan kekeringan.', 'icon' => '<path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>'],
+                    ['title' => 'Nelayan', 'desc' => 'Kecepatan angin, gelombang, dan jendela aman melaut.', 'icon' => '<path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>'],
+                    ['title' => 'Masyarakat', 'desc' => 'Peringatan dini cuaca ekstrem & info iklim harian.', 'icon' => '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>'],
+                ];
+            @endphp
+            
+            <div class="mt-8 grid gap-4 md:grid-cols-3">
+                @foreach($features as $f)
+                    <div class="rounded-xl border border-border bg-card p-6 shadow-card">
+                        <div class="grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">{!! $f['icon'] !!}</svg>
+                        </div>
+                        <div class="mt-4 font-display text-lg font-bold">{{ $f['title'] }}</div>
+                        <p class="mt-1 text-sm text-muted-foreground">{{ $f['desc'] }}</p>
+                    </div>
+                @endforeach
+            </div>
         </div>
+    </section>
 
-        <button
-            type="submit"
-            class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition hover:opacity-90 sm:w-auto"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-            Kirim Laporan
-        </button>
-        <p class="mt-4 text-xs text-muted-foreground">
-            Dengan mengirim laporan, Anda menyetujui data lokasi dan deskripsi disiarkan ke pengguna lain setelah dimoderasi.
-        </p>
-    </form>
-</section>
+    {{-- Live citizen reports --}}
+    <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+        <div class="flex items-end justify-between">
+            <div>
+                <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
+                    <span class="grid h-2 w-2 place-items-center rounded-full bg-destructive animate-pulse"></span> Live
+                </div>
+                <h2 class="mt-1 font-display text-2xl font-bold sm:text-3xl">Laporan Cuaca Warga</h2>
+                <p class="mt-1 text-sm text-muted-foreground">Disiarkan realtime via Reverb dari masyarakat di lapangan</p>
+            </div>
+            <a href="{{ route('laporkan') }}" class="hidden rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground sm:inline-flex">
+                Kirim Laporan
+            </a>
+        </div>
+        
+        @if($recentReports->isNotEmpty())
+        <div class="mt-6 divide-y divide-border rounded-xl border border-border bg-card shadow-card">
+            @foreach($recentReports as $report)
+                @php
+                    $anomalyValue = $report->anomaly_type instanceof \App\Enums\AnomalyType ? $report->anomaly_type->value : $report->anomaly_type;
+                    $label = match($anomalyValue) {
+                        'flood' => 'Banjir',
+                        'drought' => 'Kekeringan',
+                        'strong_wind' => 'Angin Kencang',
+                        default => 'Hujan Lebat/Lainnya'
+                    };
+                    $badgeClass = match($anomalyValue) {
+                        'flood' => 'bg-info/15 text-info',
+                        'strong_wind' => 'bg-warning/20 text-warning-foreground',
+                        default => 'bg-destructive/15 text-destructive'
+                    };
+                @endphp
+                <div class="flex flex-wrap items-start gap-4 p-5">
+                    <div class="mt-1 inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[11px] font-semibold {{ $badgeClass }}">
+                        {{ $label }}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex flex-wrap items-center gap-2 text-sm font-semibold text-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> {{ $report->location }}
+                        </div>
+                        <p class="mt-1 text-sm text-muted-foreground">{{ $report->description }}</p>
+                    </div>
+                    <div class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> {{ $report->created_at->diffForHumans() }}
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        @else
+        <div class="mt-6 rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+            Belum ada laporan cuaca dari warga.
+        </div>
+        @endif
+    </section>
 
 @endsection

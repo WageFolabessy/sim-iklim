@@ -11,34 +11,24 @@ class TriggerWeatherAlertRequest extends FormRequest
         return true;
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
     public function rules(): array
     {
         return [
-            'message' => ['required', 'string'],
+            'level' => ['required', 'string', 'in:bahaya,waspada,info'],
+            'title' => ['required', 'string', 'max:255'],
+            'area' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'string'],
         ];
     }
 
-    /**
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [
-            'message.required' => 'Pesan peringatan cuaca wajib diisi.',
-            'message.string' => 'Pesan peringatan harus berupa teks.',
-        ];
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    public function attributes(): array
-    {
-        return [
-            'message' => 'pesan peringatan',
+            'level.required' => 'Level peringatan wajib diisi.',
+            'level.in' => 'Level peringatan tidak valid.',
+            'title.required' => 'Judul peringatan wajib diisi.',
+            'area.required' => 'Area terdampak wajib diisi.',
+            'body.required' => 'Deskripsi peringatan wajib diisi.',
         ];
     }
 }

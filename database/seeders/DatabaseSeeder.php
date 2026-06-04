@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Models\CitizenReport;
 use App\Models\ClimateRecord;
 use App\Models\User;
+use App\Models\WeatherAlert;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -38,5 +39,8 @@ class DatabaseSeeder extends Seeder
 
         // 5 citizen reports with randomized statuses
         CitizenReport::factory(5)->create();
+
+        // 3 weather alerts
+        WeatherAlert::factory(3)->create();
     }
 }

@@ -16,9 +16,12 @@
                 Beranda
             </a>
             <a href="{{ route('climate-data') }}" class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground {{ request()->routeIs('climate-data') ? 'bg-secondary text-primary' : '' }}">
-                Data Iklim
+                Statistik
             </a>
-            <a href="{{ request()->routeIs('home') ? '#lapor' : route('home') . '#lapor' }}" class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90">
+            <a href="{{ route('peringatan') }}" class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground {{ request()->routeIs('peringatan') ? 'bg-secondary text-primary' : '' }}">
+                Peringatan
+            </a>
+            <a href="{{ route('laporkan') }}" class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90">
                 Kirim Laporan
             </a>
         </div>
@@ -37,7 +40,13 @@
                 Beranda
             </a>
             <a href="{{ route('climate-data') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
-                Data Iklim
+                Statistik
+            </a>
+            <a href="{{ route('peringatan') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
+                Peringatan
+            </a>
+            <a href="{{ route('laporkan') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
+                Lapor Cuaca
             </a>
         </nav>
     </div>
