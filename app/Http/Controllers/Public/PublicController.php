@@ -15,7 +15,9 @@ class PublicController extends Controller
 {
     public function index(): View
     {
-        return view('public.home');
+        $latestRecord = ClimateRecord::latest('recorded_at')->first();
+
+        return view('public.home', compact('latestRecord'));
     }
 
     public function climateData(): View

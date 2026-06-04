@@ -22,7 +22,7 @@
         }
     </script>
 </head>
-<body class="h-full flex flex-col bg-white text-gray-900 antialiased">
+<body class="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
 
     <x-layouts.navbar />
 
