@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#0369a1"/>
+
+  <!-- Sun rays -->
+  <g stroke="#fde68a" stroke-width="18" stroke-linecap="round">
+    <line x1="256" y1="60"  x2="256" y2="100"/>
+    <line x1="369" y1="96"  x2="345" y2="128"/>
+    <line x1="416" y1="208" x2="376" y2="216"/>
+    <line x1="369" y1="320" x2="345" y2="292"/>
+    <line x1="143" y1="96"  x2="167" y2="128"/>
+    <line x1="96"  y1="208" x2="136" y2="216"/>
+    <line x1="143" y1="320" x2="167" y2="292"/>
+  </g>
+
+  <!-- Sun disc -->
+  <circle cx="256" cy="200" r="54" fill="#fbbf24"/>
+
+  <!-- Main cloud -->
+  <ellipse cx="270" cy="330" rx="120" ry="72" fill="white"/>
+  <!-- Left bump -->
+  <circle cx="168" cy="318" r="52" fill="white"/>
+  <!-- Right bump -->
+  <circle cx="330" cy="304" r="44" fill="white"/>
+  <!-- Top centre bump -->
+  <circle cx="240" cy="278" r="56" fill="white"/>
+
+  <!-- Rain drops -->
+  <g fill="#7dd3fc">
+    <ellipse cx="196" cy="415" rx="10" ry="16"/>
+    <ellipse cx="240" cy="430" rx="10" ry="16"/>
+    <ellipse cx="284" cy="415" rx="10" ry="16"/>
+    <ellipse cx="328" cy="430" rx="10" ry="16"/>
+  </g>
+</svg>
