@@ -22,19 +22,19 @@ class PublicController extends Controller
         return view('public.home', compact('latestRecord', 'activeAlerts', 'recentReports'));
     }
 
-    public function laporkan(): View
+    public function report(): View
     {
-        return view('public.laporkan');
+        return view('public.report');
     }
 
-    public function peringatan(): View
+    public function alerts(): View
     {
         $alerts = WeatherAlert::latest()->get();
 
-        return view('public.peringatan', compact('alerts'));
+        return view('public.alerts', compact('alerts'));
     }
 
-    public function statistik(): View
+    public function statistics(): View
     {
         $tempAvg = ClimateRecord::avg('temperature') ?? 0;
         $tempMin = ClimateRecord::min('temperature') ?? 0;
@@ -63,7 +63,7 @@ class PublicController extends Controller
 
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
-        return view('public.statistik', compact(
+        return view('public.statistics', compact(
             'tempAvg', 'tempMin', 'tempMax',
             'humidityAvg', 'humidityMin', 'humidityMax',
             'rainfallAvg', 'rainfallMin', 'rainfallMax',
