@@ -9,18 +9,11 @@
     <title>@yield('title', 'Informasi Iklim') — Website Informasi Iklim Interaktif BMKG Kalbar</title>
     <meta name="description" content="@yield('description', 'Informasi iklim terkini Kalimantan Barat dari BMKG Stasiun Klimatologi.')">
 
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/icon.svg') }}">
     <link rel="icon" href="/bmkg-logo.png" type="image/png">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    {{-- Service Worker registration --}}
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .catch(function (err) { console.error('SW registration failed:', err); });
-        }
-    </script>
 </head>
 <body class="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
 
@@ -110,6 +103,20 @@
                 return div.innerHTML;
             }
         });
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
     </script>
 </body>
 </html>

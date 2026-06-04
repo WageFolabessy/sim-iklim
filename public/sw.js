@@ -1,111 +1,67 @@
 const CACHE_NAME = 'sim-iklim-v1';
-const STATIC_ASSETS = [
-    '/offline',
-];
+const OFFLINE_URL = '/offline';
 
-// ---------------------------------------------------------------------------
-// Install — precache the offline fallback page
-// ---------------------------------------------------------------------------
-
-self.addEventListener('install', (event) => {
+// Install Event: Cache the offline page
+self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+        caches.open(CACHE_NAME)
+            .then(cache => {
+                return cache.add(OFFLINE_URL);
+            })
+            .then(() => {
+                return self.skipWaiting();
+            })
     );
-    self.skipWaiting();
 });
 
-// ---------------------------------------------------------------------------
-// Activate — claim all clients and purge old caches
-// ---------------------------------------------------------------------------
-
-self.addEventListener('activate', (event) => {
+// Activate Event: Clean up old caches and claim clients
+self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then((cacheNames) =>
-            Promise.all(
-                cacheNames
-                    .filter((name) => name !== CACHE_NAME)
-                    .map((name) => caches.delete(name))
-            )
-        )
-    );
-    self.clients.claim();
-});
-
-// ---------------------------------------------------------------------------
-// Fetch — Network First for HTML navigation, Cache First for static assets
-// ---------------------------------------------------------------------------
-
-self.addEventListener('fetch', (event) => {
-    const { request } = event;
-    const url = new URL(request.url);
-
-    // Only intercept same-origin requests
-    if (url.origin !== self.location.origin) {
-        return;
-    }
-
-    const isNavigation = request.mode === 'navigate';
-    const isStaticAsset = /\.(css|js|woff2?|png|jpg|jpeg|svg|webp|ico)$/.test(url.pathname);
-
-    if (isNavigation) {
-        // Network First: serve latest HTML, fall back to offline page on failure
-        event.respondWith(
-            fetch(request)
-                .then((response) => {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-                    return response;
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
                 })
-                .catch(() =>
-                    caches.match(request).then(
-                        (cached) => cached || caches.match('/offline')
-                    )
-                )
-        );
+            );
+        }).then(() => self.clients.claim())
+    );
+});
+
+// Fetch Event: Network First, Cache Fallback strategy
+self.addEventListener('fetch', event => {
+    // Only intercept GET requests
+    if (event.request.method !== 'GET') {
         return;
     }
 
-    if (isStaticAsset) {
-        // Cache First: static assets are content-hashed by Vite, safe to cache aggressively
-        event.respondWith(
-            caches.match(request).then(
-                (cached) =>
-                    cached ||
-                    fetch(request).then((response) => {
-                        const clone = response.clone();
-                        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-                        return response;
-                    })
-            )
-        );
-    }
-});
+    event.respondWith(
+        fetch(event.request)
+            .then(networkResponse => {
+                // If successful, open cache and store a clone of the response
+                return caches.open(CACHE_NAME).then(cache => {
+                    // Only cache valid responses (status 200, or opaque responses which we can't reliably check)
+                    // We also don't strictly need to check status if we just blindly cache successful requests,
+                    // but it's a good practice.
+                    cache.put(event.request, networkResponse.clone());
+                    return networkResponse;
+                });
+            })
+            .catch(() => {
+                // If fetch fails (e.g. offline), try to match the request in cache
+                return caches.match(event.request).then(cachedResponse => {
+                    if (cachedResponse) {
+                        return cachedResponse;
+                    }
+                    
+                    // If not found in cache and it's a navigation request (HTML page), return the offline page
+                    if (event.request.mode === 'navigate') {
+                        return caches.match(OFFLINE_URL);
+                    }
 
-// ---------------------------------------------------------------------------
-// Push — handle Web Push notifications from server
-// ---------------------------------------------------------------------------
-
-self.addEventListener('push', (event) => {
-    const data = event.data ? event.data.json() : {};
-    const title = data.title || 'SIM Iklim BMKG';
-    const options = {
-        body: data.body || 'Ada informasi iklim terbaru.',
-        icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-192x192.png',
-        data: data.url ? { url: data.url } : {},
-    };
-
-    event.waitUntil(self.registration.showNotification(title, options));
-});
-
-// ---------------------------------------------------------------------------
-// Notification click — open the associated URL
-// ---------------------------------------------------------------------------
-
-self.addEventListener('notificationclick', (event) => {
-    event.notification.close();
-
-    if (event.notification.data && event.notification.data.url) {
-        event.waitUntil(clients.openWindow(event.notification.data.url));
-    }
+                    // Otherwise do nothing (could return a fallback image, etc.)
+                });
+            })
+    );
 });

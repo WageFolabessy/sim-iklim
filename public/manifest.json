@@ -1,12 +1,12 @@
 {
-    "name": "SIM Iklim BMKG Kalbar",
-    "short_name": "SIM Iklim",
-    "description": "Sistem Informasi Monitoring Iklim BMKG Stasiun Klimatologi Kalimantan Barat",
-    "start_url": "/",
+    "name": "Iklim Interaktif Kalimantan Barat",
+    "short_name": "Iklim Kalbar",
+    "start_url": "/?source=pwa",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#0369a1",
-    "lang": "id",
+    "theme_color": "#0ea5e9",
+    "description": "Layanan pemantauan cuaca dan iklim BMKG Stasiun Klimatologi Kalimantan Barat.",
+    "orientation": "portrait-primary",
     "icons": [
         {
             "src": "/icons/icon.svg",

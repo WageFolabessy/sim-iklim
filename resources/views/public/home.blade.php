@@ -97,12 +97,11 @@
     </section>
     @endif
 
-    {{-- Station grid --}}
     <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <h2 class="font-display text-2xl font-bold sm:text-3xl">Stasiun di Kalimantan Barat</h2>
-                <p class="mt-1 text-sm text-muted-foreground">Pantauan dari 6 stasiun PMG aktif</p>
+                <h2 class="font-display text-2xl font-bold sm:text-3xl">Data Pengamatan Terkini</h2>
+                <p class="mt-1 text-sm text-muted-foreground">Stasiun Klimatologi Kelas II Kalimantan Barat</p>
             </div>
             <a href="{{ route('statistik') }}" class="inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary/20 shrink-0">
                 Statistik lengkap
@@ -110,32 +109,43 @@
             </a>
         </div>
         
-        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            @foreach($stationsData as $s)
-                <div class="group rounded-xl border border-border bg-card p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-glow">
-                    <div class="flex items-center justify-between">
-                        <div class="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-primary"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> {{ $s['name'] }}
-                        </div>
-                        <span class="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider {{ $s['status'] === 'waspada' ? 'bg-warning/20 text-warning-foreground' : 'bg-success/15 text-success' }}">
-                            {{ $s['status'] }}
-                        </span>
+        @if($latestRecord)
+        @php
+            $status = ($latestRecord->rainfall > 20 || $latestRecord->temperature > 34) ? 'waspada' : 'normal';
+        @endphp
+        <div class="mt-6 max-w-2xl">
+            <div class="group rounded-xl border border-border bg-card p-6 shadow-card transition hover:-translate-y-0.5 hover:shadow-glow">
+                <div class="flex items-center justify-between">
+                    <div class="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-primary"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Stasiun Klimatologi Kelas II Kalimantan Barat
                     </div>
-                    <div class="mt-4 flex items-end justify-between">
-                        <div>
-                            <div class="text-xs text-muted-foreground">Suhu</div>
-                            <div class="font-display text-3xl font-bold">{{ $s['temp'] }}&deg;<span class="text-base text-muted-foreground">C</span></div>
+                    <span class="rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-wider {{ $status === 'waspada' ? 'bg-warning/20 text-warning-foreground' : 'bg-success/15 text-success' }}">
+                        {{ $status }}
+                    </span>
+                </div>
+                <div class="mt-6 flex flex-wrap items-end gap-12">
+                    <div>
+                        <div class="text-sm font-medium text-muted-foreground">Suhu Udara</div>
+                        <div class="font-display text-4xl font-bold">{{ number_format($latestRecord->temperature, 1) }}&deg;<span class="text-xl text-muted-foreground">C</span></div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium text-muted-foreground">Curah Hujan</div>
+                        <div class="inline-flex items-center gap-1.5 font-semibold text-info text-2xl font-display">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg> {{ number_format($latestRecord->rainfall, 1) }} <span class="text-lg">mm</span>
                         </div>
-                        <div class="text-right">
-                            <div class="text-xs text-muted-foreground">Curah hujan</div>
-                            <div class="inline-flex items-center gap-1 font-semibold text-info">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg> {{ $s['rain'] }} mm
-                            </div>
-                        </div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium text-muted-foreground">Kecepatan Angin</div>
+                        <div class="font-display text-2xl font-bold text-foreground">{{ number_format($latestRecord->wind_speed, 1) }} <span class="text-lg text-muted-foreground">km/h</span></div>
                     </div>
                 </div>
-            @endforeach
+                <div class="mt-6 pt-4 border-t border-border flex justify-between items-center text-xs text-muted-foreground">
+                    <span>Petugas: {{ $latestRecord->user->name ?? 'Pengamat' }}</span>
+                    <span>Diperbarui: {{ \Carbon\Carbon::parse($latestRecord->recorded_at)->diffForHumans() }}</span>
+                </div>
+            </div>
         </div>
+        @endif
     </section>
 
     {{-- Features grid --}}

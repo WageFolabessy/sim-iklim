@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate(
-            ['email' => 'admin@cangkir.com'],
+            ['email' => 'admin@pmg.com'],
             [
                 'name' => 'Riko',
                 'password' => bcrypt('password'),
@@ -21,24 +21,13 @@ class UserSeeder extends Seeder
             ]
         );
 
-        $stations = [
-            'Stasiun Klimatologi Mempawah',
-            'Stasiun Meteorologi Supadio',
-            'Stasiun Meteorologi Susilo Sintang',
-            'Stasiun Meteorologi Pangsuma Kapuas Hulu',
-            'Stasiun Meteorologi Rahadi Oesman Ketapang',
-            'Stasiun Meteorologi Tebelian Sintang',
-        ];
-
-        foreach ($stations as $i => $station) {
-            User::firstOrCreate(
-                ['email' => 'pengamat'.($i + 1).'@bmkg.go.id'],
-                [
-                    'name' => $station,
-                    'password' => bcrypt('password'),
-                    'role' => 'pengamat',
-                ]
-            );
-        }
+        User::firstOrCreate(
+            ['email' => 'pengamat@pmg.com'],
+            [
+                'name' => 'Petugas Pengamat',
+                'password' => bcrypt('password'),
+                'role' => 'pengamat',
+            ]
+        );
     }
 }
