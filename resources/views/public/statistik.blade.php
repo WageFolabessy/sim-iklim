@@ -15,7 +15,7 @@
     </section>
 
     <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-        <div class="grid gap-4 sm:grid-cols-2">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {{-- Temperature --}}
             <div class="rounded-xl border border-border bg-card p-6 shadow-card">
                 <div class="flex items-center justify-between">
@@ -23,21 +23,17 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-primary"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                 </div>
                 <div class="mt-4 flex items-baseline gap-2">
-                    <span class="font-display text-4xl font-bold text-primary">{{ isset($stats) ? number_format($stats->avg_temperature, 1) : '--' }}</span>
+                    <span class="font-display text-4xl font-bold text-primary">{{ number_format($tempAvg, 1) }}</span>
                     <span class="text-sm text-muted-foreground">°C rata-rata</span>
                 </div>
-                <div class="mt-5 grid grid-cols-3 gap-3 border-t border-border pt-4 text-center">
+                <div class="mt-5 grid grid-cols-2 gap-3 border-t border-border pt-4 text-center">
                     <div>
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Min</div>
-                        <div class="mt-0.5 text-base font-bold text-info">{{ isset($stats) ? number_format($stats->min_temperature, 1) : '--' }}°C</div>
+                        <div class="mt-0.5 text-base font-bold text-info">{{ number_format($tempMin, 1) }}°C</div>
                     </div>
-                    <div class="border-x border-border">
+                    <div class="border-l border-border">
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Max</div>
-                        <div class="mt-0.5 text-base font-bold text-destructive">{{ isset($stats) ? number_format($stats->max_temperature, 1) : '--' }}°C</div>
-                    </div>
-                    <div>
-                        <div class="text-[11px] uppercase tracking-wider text-muted-foreground">σ</div>
-                        <div class="mt-0.5 text-base font-bold text-foreground">{{ isset($stats) ? number_format($stats->stddev_temperature, 1) : '--' }}</div>
+                        <div class="mt-0.5 text-base font-bold text-destructive">{{ number_format($tempMax, 1) }}°C</div>
                     </div>
                 </div>
             </div>
@@ -49,47 +45,61 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-primary"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                 </div>
                 <div class="mt-4 flex items-baseline gap-2">
-                    <span class="font-display text-4xl font-bold text-primary">{{ isset($stats) ? number_format($stats->avg_humidity, 0) : '--' }}</span>
+                    <span class="font-display text-4xl font-bold text-primary">{{ number_format($humidityAvg, 0) }}</span>
                     <span class="text-sm text-muted-foreground">% rata-rata</span>
                 </div>
-                <div class="mt-5 grid grid-cols-3 gap-3 border-t border-border pt-4 text-center">
+                <div class="mt-5 grid grid-cols-2 gap-3 border-t border-border pt-4 text-center">
                     <div>
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Min</div>
-                        <div class="mt-0.5 text-base font-bold text-info">{{ isset($stats) ? number_format($stats->min_humidity, 0) : '--' }}%</div>
+                        <div class="mt-0.5 text-base font-bold text-info">{{ number_format($humidityMin, 0) }}%</div>
                     </div>
-                    <div class="border-x border-border">
+                    <div class="border-l border-border">
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Max</div>
-                        <div class="mt-0.5 text-base font-bold text-destructive">{{ isset($stats) ? number_format($stats->max_humidity, 0) : '--' }}%</div>
-                    </div>
-                    <div>
-                        <div class="text-[11px] uppercase tracking-wider text-muted-foreground">σ</div>
-                        <div class="mt-0.5 text-base font-bold text-foreground">{{ isset($stats) ? number_format($stats->stddev_humidity, 1) : '--' }}</div>
+                        <div class="mt-0.5 text-base font-bold text-destructive">{{ number_format($humidityMax, 0) }}%</div>
                     </div>
                 </div>
             </div>
             
             {{-- Rainfall --}}
-            <div class="rounded-xl border border-border bg-card p-6 shadow-card sm:col-span-2 lg:col-span-1">
+            <div class="rounded-xl border border-border bg-card p-6 shadow-card">
                 <div class="flex items-center justify-between">
                     <div class="font-display text-lg font-bold">Curah Hujan</div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-primary"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                 </div>
                 <div class="mt-4 flex items-baseline gap-2">
-                    <span class="font-display text-4xl font-bold text-primary">{{ isset($stats) ? number_format($stats->avg_rainfall, 1) : '--' }}</span>
+                    <span class="font-display text-4xl font-bold text-primary">{{ number_format($rainfallAvg, 1) }}</span>
                     <span class="text-sm text-muted-foreground">mm rata-rata</span>
                 </div>
-                <div class="mt-5 grid grid-cols-3 gap-3 border-t border-border pt-4 text-center">
+                <div class="mt-5 grid grid-cols-2 gap-3 border-t border-border pt-4 text-center">
                     <div>
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Min</div>
-                        <div class="mt-0.5 text-base font-bold text-info">{{ isset($stats) ? number_format($stats->min_rainfall, 1) : '--' }}mm</div>
+                        <div class="mt-0.5 text-base font-bold text-info">{{ number_format($rainfallMin, 1) }}mm</div>
                     </div>
-                    <div class="border-x border-border">
+                    <div class="border-l border-border">
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Max</div>
-                        <div class="mt-0.5 text-base font-bold text-destructive">{{ isset($stats) ? number_format($stats->max_rainfall, 1) : '--' }}mm</div>
+                        <div class="mt-0.5 text-base font-bold text-destructive">{{ number_format($rainfallMax, 1) }}mm</div>
                     </div>
+                </div>
+            </div>
+
+            {{-- Wind Speed --}}
+            <div class="rounded-xl border border-border bg-card p-6 shadow-card">
+                <div class="flex items-center justify-between">
+                    <div class="font-display text-lg font-bold">Kecepatan Angin</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-primary"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>
+                </div>
+                <div class="mt-4 flex items-baseline gap-2">
+                    <span class="font-display text-4xl font-bold text-primary">{{ number_format($windAvg, 1) }}</span>
+                    <span class="text-sm text-muted-foreground">km/j rata-rata</span>
+                </div>
+                <div class="mt-5 grid grid-cols-2 gap-3 border-t border-border pt-4 text-center">
                     <div>
-                        <div class="text-[11px] uppercase tracking-wider text-muted-foreground">σ</div>
-                        <div class="mt-0.5 text-base font-bold text-foreground">{{ isset($stats) ? number_format($stats->stddev_rainfall, 1) : '--' }}</div>
+                        <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Min</div>
+                        <div class="mt-0.5 text-base font-bold text-info">{{ number_format($windMin, 1) }}km/j</div>
+                    </div>
+                    <div class="border-l border-border">
+                        <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Max</div>
+                        <div class="mt-0.5 text-base font-bold text-destructive">{{ number_format($windMax, 1) }}km/j</div>
                     </div>
                 </div>
             </div>
@@ -100,17 +110,12 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="font-display text-lg font-bold">Curah Hujan Bulanan</h2>
-                    <p class="text-xs text-muted-foreground">Rata-rata 10 tahun, satuan mm</p>
-                </div>
-                <div class="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg> 2015 – 2024
+                    <p class="text-xs text-muted-foreground">Rata-rata curah hujan bulanan, satuan mm</p>
                 </div>
             </div>
             
             @php
-                $months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
-                $rainData = [184, 162, 220, 198, 174, 132, 108, 96, 148, 212, 256, 224];
-                $maxRain = max($rainData);
+                $maxRain = max($rainData) > 0 ? max($rainData) : 1;
             @endphp
             
             <div class="mt-6 flex h-56 items-end gap-2">

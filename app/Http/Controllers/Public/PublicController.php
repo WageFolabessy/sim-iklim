@@ -9,7 +9,6 @@ use App\Models\CitizenReport;
 use App\Models\ClimateRecord;
 use App\Models\WeatherAlert;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PublicController extends Controller
@@ -35,51 +34,42 @@ class PublicController extends Controller
         return view('public.peringatan', compact('alerts'));
     }
 
-    public function climateData(): View
+    public function statistik(): View
     {
-        $records = ClimateRecord::with('user')
-            ->latest('recorded_at')
-            ->paginate(15);
+        $tempAvg = ClimateRecord::avg('temperature') ?? 0;
+        $tempMin = ClimateRecord::min('temperature') ?? 0;
+        $tempMax = ClimateRecord::max('temperature') ?? 0;
 
-        /**
-         * Historical statistics for the current calendar month across the last 5 years.
-         * Uses pure MySQL aggregations — no ML, no external dependencies.
-         *
-         * @var object{
-         *   avg_temperature: float|null,
-         *   min_temperature: float|null,
-         *   max_temperature: float|null,
-         *   stddev_temperature: float|null,
-         *   avg_humidity: float|null,
-         *   min_humidity: float|null,
-         *   max_humidity: float|null,
-         *   stddev_humidity: float|null,
-         *   avg_rainfall: float|null,
-         *   min_rainfall: float|null,
-         *   max_rainfall: float|null,
-         *   stddev_rainfall: float|null,
-         * } $stats
-         */
-        $stats = ClimateRecord::query()
-            ->whereMonth('recorded_at', now()->month)
-            ->where('recorded_at', '>=', now()->subYears(5)->startOfMonth())
-            ->select([
-                DB::raw('AVG(temperature)   AS avg_temperature'),
-                DB::raw('MIN(temperature)   AS min_temperature'),
-                DB::raw('MAX(temperature)   AS max_temperature'),
-                DB::raw('STDDEV(temperature) AS stddev_temperature'),
-                DB::raw('AVG(humidity)      AS avg_humidity'),
-                DB::raw('MIN(humidity)      AS min_humidity'),
-                DB::raw('MAX(humidity)      AS max_humidity'),
-                DB::raw('STDDEV(humidity)   AS stddev_humidity'),
-                DB::raw('AVG(rainfall)      AS avg_rainfall'),
-                DB::raw('MIN(rainfall)      AS min_rainfall'),
-                DB::raw('MAX(rainfall)      AS max_rainfall'),
-                DB::raw('STDDEV(rainfall)   AS stddev_rainfall'),
-            ])
-            ->first();
+        $humidityAvg = ClimateRecord::avg('humidity') ?? 0;
+        $humidityMin = ClimateRecord::min('humidity') ?? 0;
+        $humidityMax = ClimateRecord::max('humidity') ?? 0;
 
-        return view('public.climate-data', compact('records', 'stats'));
+        $rainfallAvg = ClimateRecord::avg('rainfall') ?? 0;
+        $rainfallMin = ClimateRecord::min('rainfall') ?? 0;
+        $rainfallMax = ClimateRecord::max('rainfall') ?? 0;
+
+        $windAvg = ClimateRecord::avg('wind_speed') ?? 0;
+        $windMin = ClimateRecord::min('wind_speed') ?? 0;
+        $windMax = ClimateRecord::max('wind_speed') ?? 0;
+
+        $monthlyRainfall = ClimateRecord::selectRaw('MONTH(recorded_at) as month, AVG(rainfall) as avg_rain')
+            ->groupBy('month')
+            ->pluck('avg_rain', 'month');
+
+        $rainData = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $rainData[] = round($monthlyRainfall[$i] ?? 0, 1);
+        }
+
+        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+        return view('public.statistik', compact(
+            'tempAvg', 'tempMin', 'tempMax',
+            'humidityAvg', 'humidityMin', 'humidityMax',
+            'rainfallAvg', 'rainfallMin', 'rainfallMax',
+            'windAvg', 'windMin', 'windMax',
+            'rainData', 'months'
+        ));
     }
 
     public function storeCitizenReport(StoreCitizenReportRequest $request): RedirectResponse

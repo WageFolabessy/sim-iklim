@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('temperature', 5, 2);
             $table->integer('humidity');
             $table->decimal('rainfall', 8, 2);
+            $table->float('wind_speed')->default(0);
             $table->timestamps();
         });
     }

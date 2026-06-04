@@ -26,7 +26,7 @@
                         Kirim Laporan Cuaca
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </a>
-                    <a href="{{ route('climate-data') }}" class="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15">
+                    <a href="{{ route('statistik') }}" class="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
                         Lihat Data Iklim
                     </a>
@@ -81,7 +81,7 @@
 
     {{-- Active alerts banner --}}
     @if($activeAlerts->isNotEmpty())
-    <section class="mx-auto max-w-7xl px-4 sm:px-6">
+    <section class="mx-auto max-w-7xl px-4 sm:px-6 relative z-10">
         <div class="-mt-6 rounded-xl border border-warning/40 bg-gradient-warn p-4 text-warning-foreground shadow-card sm:p-5">
             <div class="flex flex-wrap items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
@@ -104,7 +104,7 @@
                 <h2 class="font-display text-2xl font-bold sm:text-3xl">Stasiun di Kalimantan Barat</h2>
                 <p class="mt-1 text-sm text-muted-foreground">Pantauan dari 6 stasiun PMG aktif</p>
             </div>
-            <a href="{{ route('climate-data') }}" class="hidden text-sm font-semibold text-primary hover:underline sm:block">
+            <a href="{{ route('statistik') }}" class="hidden text-sm font-semibold text-primary hover:underline sm:block">
                 Statistik lengkap &rarr;
             </a>
         </div>
@@ -210,9 +210,11 @@
                         default => 'bg-destructive/15 text-destructive'
                     };
                 @endphp
-                <div class="flex flex-wrap items-start gap-4 p-5">
-                    <div class="mt-1 inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[11px] font-semibold {{ $badgeClass }}">
-                        {{ $label }}
+                <div class="flex flex-col sm:flex-row items-start gap-4 p-5">
+                    <div class="w-full sm:w-48 shrink-0 pt-1">
+                        <span class="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold {{ $badgeClass }}">
+                            {{ $label }}
+                        </span>
                     </div>
                     <div class="min-w-0 flex-1">
                         <div class="flex flex-wrap items-center gap-2 text-sm font-semibold text-foreground">

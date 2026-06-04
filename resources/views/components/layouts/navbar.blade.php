@@ -15,7 +15,7 @@
             <a href="{{ route('home') }}" class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground {{ request()->routeIs('home') ? 'bg-secondary text-primary' : '' }}">
                 Beranda
             </a>
-            <a href="{{ route('climate-data') }}" class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground {{ request()->routeIs('climate-data') ? 'bg-secondary text-primary' : '' }}">
+            <a href="{{ route('statistik') }}" class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground {{ request()->routeIs('statistik') ? 'bg-secondary text-primary' : '' }}">
                 Statistik
             </a>
             <a href="{{ route('peringatan') }}" class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground {{ request()->routeIs('peringatan') ? 'bg-secondary text-primary' : '' }}">
@@ -39,7 +39,7 @@
             <a href="{{ route('home') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
                 Beranda
             </a>
-            <a href="{{ route('climate-data') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
+            <a href="{{ route('statistik') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
                 Statistik
             </a>
             <a href="{{ route('peringatan') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">

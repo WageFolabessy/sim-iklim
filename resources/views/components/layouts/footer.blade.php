@@ -15,8 +15,8 @@
             <div>
                 <div class="text-sm font-semibold text-foreground">Layanan</div>
                 <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
-                    <li><a href="{{ route('climate-data') }}" class="hover:text-foreground transition-colors">Data iklim harian</a></li>
-                    <li><a href="{{ route('climate-data') }}" class="hover:text-foreground transition-colors">Proyeksi statistik historis</a></li>
+                    <li><a href="{{ route('statistik') }}" class="hover:text-foreground transition-colors">Data iklim harian</a></li>
+                    <li><a href="{{ route('statistik') }}" class="hover:text-foreground transition-colors">Proyeksi statistik historis</a></li>
                     <li>Peringatan dini cuaca ekstrem</li>
                     <li><a href="{{ request()->routeIs('home') ? '#lapor' : route('home') . '#lapor' }}" class="hover:text-foreground transition-colors">Laporan cuaca warga</a></li>
                 </ul>
