@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Moderasi Laporan Warga')
+@section('page-title', 'Moderasi & Peringatan')
 
 @section('content')
 <div class="space-y-8">

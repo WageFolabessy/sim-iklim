@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Input Data Iklim')
+@section('page-title', 'Input Data Iklim')
 
 @section('content')
 <div class="space-y-8">
