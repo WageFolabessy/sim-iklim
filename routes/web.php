@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/data-iklim', [PublicController::class, 'climateData'])->name('climate-data');
 Route::post('/laporan-warga', [PublicController::class, 'storeCitizenReport'])->name('citizen-reports.store');
+Route::view('/offline', 'offline')->name('offline');
 
 // ---------------------------------------------------------------------------
 // Auth routes
