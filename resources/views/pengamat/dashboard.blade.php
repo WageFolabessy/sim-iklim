@@ -4,10 +4,10 @@
 @section('page-title', 'Dasbor')
 
 @section('content')
-<div class="max-w-4xl space-y-8">
+<div class="space-y-8">
 
     {{-- Welcome banner --}}
-    <section class="relative overflow-hidden bg-gradient-to-br from-sky-600 to-cyan-600 rounded-2xl p-8 text-white shadow-md">
+    <section class="relative overflow-hidden bg-linear-to-br from-sky-600 to-cyan-600 rounded-2xl p-8 text-white shadow-md">
         {{-- Decorative blobs --}}
         <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" aria-hidden="true"></div>
         <div class="absolute -bottom-12 -left-6 w-40 h-40 bg-white/5 rounded-full blur-xl pointer-events-none" aria-hidden="true"></div>
@@ -87,7 +87,7 @@
         <p>
             Data yang Anda inputkan akan tersedia secara publik melalui
             <a href="{{ route('climate-data') }}" target="_blank" class="font-semibold underline hover:text-sky-600">Portal Data Iklim</a>
-            dan disiarkan secara real-time ke semua pengunjung melalui Reverb.
+            dan akan diperbarui secara langsung di portal publik.
         </p>
     </section>
 

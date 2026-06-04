@@ -6,13 +6,14 @@
 @section('content')
 
 {{-- Hero Section --}}
-<section class="bg-linear-to-br from-sky-700 via-sky-600 to-cyan-600 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+<div class="min-h-[calc(100vh-4rem)] flex flex-col">
+    <section class="flex-1 flex flex-col justify-center pb-12 md:pb-16 bg-linear-to-br from-sky-700 via-sky-600 to-cyan-600 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="max-w-3xl">
             <span class="inline-block bg-white/20 text-white text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-5">
                 BMKG Stasiun Klimatologi Kalimantan Barat
             </span>
-            <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-5">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-5">
                 Sistem Informasi<br>Monitoring Iklim<br>
                 <span class="text-cyan-200">Kalimantan Barat</span>
             </h1>
@@ -20,13 +21,13 @@
                 Pantau data suhu, kelembapan, dan curah hujan terkini dari stasiun BMKG.
                 Laporkan anomali cuaca di sekitar Anda untuk membantu pemantauan iklim regional.
             </p>
-            <div class="flex flex-wrap gap-3">
+            <div class="flex flex-col sm:flex-row gap-4">
                 <a href="{{ route('climate-data') }}"
-                    class="bg-white text-sky-700 font-semibold px-6 py-3 rounded-xl shadow-sm hover:bg-sky-50 transition-colors">
+                    class="w-full sm:w-auto text-center bg-white text-sky-700 font-semibold px-6 py-3 rounded-xl shadow-sm hover:bg-sky-50 transition-colors">
                     Lihat Data Iklim
                 </a>
                 <a href="#lapor"
-                    class="bg-white/20 hover:bg-white/30 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
+                    class="w-full sm:w-auto text-center bg-white/20 hover:bg-white/30 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
                     Laporkan Cuaca
                 </a>
             </div>
@@ -36,25 +37,26 @@
 
 {{-- Stats strip --}}
 <section class="bg-white border-b border-gray-100 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        <div>
-            <p class="text-2xl font-bold text-sky-700">24/7</p>
-            <p class="text-sm text-gray-500 mt-1">Pemantauan Real-time</p>
+    <div class="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-y-8 gap-x-4 p-6 sm:p-8">
+        <div class="flex flex-col items-center text-center">
+            <h3 class="text-base sm:text-lg lg:text-xl font-bold text-sky-700">24/7</h3>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed">Pemantauan Real-time</p>
         </div>
-        <div>
-            <p class="text-2xl font-bold text-sky-700">Akurat</p>
-            <p class="text-sm text-gray-500 mt-1">Data Terverifikasi BMKG</p>
+        <div class="flex flex-col items-center text-center">
+            <h3 class="text-base sm:text-lg lg:text-xl font-bold text-sky-700">Akurat</h3>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed">Data Terverifikasi BMKG</p>
         </div>
-        <div>
-            <p class="text-2xl font-bold text-sky-700">Gratis</p>
-            <p class="text-sm text-gray-500 mt-1">Akses Publik Terbuka</p>
+        <div class="flex flex-col items-center text-center">
+            <h3 class="text-base sm:text-lg lg:text-xl font-bold text-sky-700">Gratis</h3>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed">Akses Publik Terbuka</p>
         </div>
-        <div>
-            <p class="text-2xl font-bold text-sky-700">PWA</p>
-            <p class="text-sm text-gray-500 mt-1">Bisa Diinstal di HP</p>
+        <div class="flex flex-col items-center text-center">
+            <h3 class="text-base sm:text-lg lg:text-xl font-bold text-sky-700">Aplikasi Praktis</h3>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed">Simpan di layar utama HP Anda untuk akses cepat.</p>
         </div>
     </div>
 </section>
+</div>
 
 {{-- Citizen Report Form --}}
 <section id="lapor" class="bg-gray-50 py-16 scroll-mt-24">
@@ -81,7 +83,11 @@
                         id="reporter_name"
                         name="reporter_name"
                         value="{{ old('reporter_name') }}"
-                        class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('reporter_name') border-red-400 bg-red-50 @enderror"
+                        @class([
+                            'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500',
+                            'border-red-400 bg-red-50' => $errors->has('reporter_name'),
+                            'border-gray-300' => !$errors->has('reporter_name'),
+                        ])
                         placeholder="Nama Anda (boleh dikosongkan)"
                     >
                     @error('reporter_name')
@@ -100,7 +106,11 @@
                         name="location"
                         value="{{ old('location') }}"
                         required
-                        class="w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('location') border-red-400 bg-red-50 @else border-gray-300 @enderror"
+                        @class([
+                            'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500',
+                            'border-red-400 bg-red-50' => $errors->has('location'),
+                            'border-gray-300' => !$errors->has('location'),
+                        ])
                         placeholder="Contoh: Pontianak Selatan, Jl. Ahmad Yani"
                     >
                     @error('location')
@@ -117,7 +127,11 @@
                         id="anomaly_type"
                         name="anomaly_type"
                         required
-                        class="w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('anomaly_type') border-red-400 bg-red-50 @else border-gray-300 bg-white @enderror"
+                        @class([
+                            'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500',
+                            'border-red-400 bg-red-50' => $errors->has('anomaly_type'),
+                            'border-gray-300 bg-white' => !$errors->has('anomaly_type'),
+                        ])
                     >
                         <option value="" disabled {{ old('anomaly_type') ? '' : 'selected' }}>-- Pilih jenis anomali --</option>
                         <option value="flood" {{ old('anomaly_type') === 'flood' ? 'selected' : '' }}>Banjir</option>
@@ -140,7 +154,11 @@
                         name="description"
                         rows="4"
                         required
-                        class="w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none @error('description') border-red-400 bg-red-50 @else border-gray-300 @enderror"
+                        @class([
+                            'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none',
+                            'border-red-400 bg-red-50' => $errors->has('description'),
+                            'border-gray-300' => !$errors->has('description'),
+                        ])
                         placeholder="Ceritakan kondisi cuaca yang Anda alami secara singkat..."
                     >{{ old('description') }}</textarea>
                     @error('description')
