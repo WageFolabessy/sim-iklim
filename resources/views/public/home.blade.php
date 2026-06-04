@@ -6,7 +6,7 @@
 @section('content')
 
 {{-- Hero Section --}}
-<section class="bg-gradient-to-br from-sky-700 via-sky-600 to-cyan-600 text-white">
+<section class="bg-linear-to-br from-sky-700 via-sky-600 to-cyan-600 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
         <div class="max-w-3xl">
             <span class="inline-block bg-white/20 text-white text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-5">
@@ -25,7 +25,7 @@
                     class="bg-white text-sky-700 font-semibold px-6 py-3 rounded-xl shadow-sm hover:bg-sky-50 transition-colors">
                     Lihat Data Iklim
                 </a>
-                <a href="#laporan-warga"
+                <a href="#lapor"
                     class="bg-white/20 hover:bg-white/30 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
                     Laporkan Cuaca
                 </a>
@@ -57,7 +57,7 @@
 </section>
 
 {{-- Citizen Report Form --}}
-<section id="laporan-warga" class="bg-gray-50 py-16">
+<section id="lapor" class="bg-gray-50 py-16 scroll-mt-24">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="text-center mb-10">
