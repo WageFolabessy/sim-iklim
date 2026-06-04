@@ -6,29 +6,29 @@
 @section('content')
 
 {{-- HERO --}}
-<section class="relative overflow-hidden bg-gradient-hero">
+<section class="relative overflow-hidden bg-gradient-hero lg:min-h-[85vh] flex items-center">
     <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15) 0, transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0, transparent 50%)"></div>
-    <div class="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:py-20">
-        <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+    <div class="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-20 w-full">
+        <div class="grid gap-8 lg:gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
             <div>
                 <div class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur">
                     <span class="grid h-1.5 w-1.5 place-items-center rounded-full bg-success"></span>
                     Sistem aktif · Diperbarui {{ date('H:i') }}
                 </div>
-                <h1 class="mt-5 font-display text-4xl font-bold leading-[1.05] text-white text-balance sm:text-5xl lg:text-6xl">
-                    Iklim Kalimantan Barat,<br />dalam genggaman warga.
+                <h1 class="mt-4 lg:mt-5 font-display text-3xl font-bold leading-[1.05] text-white text-balance sm:text-5xl lg:text-6xl">
+                    Website Informasi Iklim Interaktif
                 </h1>
-                <p class="mt-5 max-w-xl text-base text-white/85 sm:text-lg">
-                    Data resmi PMG untuk petani, nelayan, dan masyarakat. Pantau cuaca terkini, dapatkan peringatan dini, dan laporkan kondisi di sekitarmu.
+                <p class="mt-3 lg:mt-5 max-w-xl text-sm text-white/85 sm:text-lg">
+                    Layanan pemantauan data cuaca dan iklim dari BMKG Stasiun Klimatologi Kalimantan Barat untuk petani, nelayan, dan masyarakat umum.
                 </p>
-                <div class="mt-7 flex flex-wrap gap-3">
-                    <a href="{{ route('laporkan') }}" class="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-primary shadow-glow transition hover:bg-white/95">
+                <div class="mt-6 lg:mt-7 flex flex-col sm:flex-row gap-3">
+                    <a href="{{ route('laporkan') }}" class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-primary shadow-glow transition hover:bg-white/95">
                         Kirim Laporan Cuaca
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </a>
-                    <a href="{{ route('statistik') }}" class="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-                        Lihat Data Iklim
+                    <a href="{{ route('statistik') }}" class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-lg border border-white/30 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+                        Lihat Data Iklim & Statistik
                     </a>
                 </div>
                 <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs text-white/75">
@@ -99,29 +99,19 @@
 
     {{-- Station grid --}}
     <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <div class="flex items-end justify-between">
+        <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
                 <h2 class="font-display text-2xl font-bold sm:text-3xl">Stasiun di Kalimantan Barat</h2>
                 <p class="mt-1 text-sm text-muted-foreground">Pantauan dari 6 stasiun PMG aktif</p>
             </div>
-            <a href="{{ route('statistik') }}" class="hidden text-sm font-semibold text-primary hover:underline sm:block">
-                Statistik lengkap &rarr;
+            <a href="{{ route('statistik') }}" class="inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary/20 shrink-0">
+                Statistik lengkap
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
         </div>
         
-        @php
-            $stations = [
-                ['name' => 'Supadio Pontianak', 'temp' => '32.4', 'rain' => '12.5', 'status' => 'normal'],
-                ['name' => 'Rahadi Oesman Ketapang', 'temp' => '33.1', 'rain' => '45.2', 'status' => 'waspada'],
-                ['name' => 'Tebelian Sintang', 'temp' => '34.2', 'rain' => '0.0', 'status' => 'waspada'],
-                ['name' => 'Susilo Sintang', 'temp' => '33.8', 'rain' => '2.1', 'status' => 'normal'],
-                ['name' => 'Pangsuma Kapuas Hulu', 'temp' => '31.5', 'rain' => '18.4', 'status' => 'normal'],
-                ['name' => 'Paloh Sambas', 'temp' => '32.1', 'rain' => '5.0', 'status' => 'normal'],
-            ];
-        @endphp
-        
         <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            @foreach($stations as $s)
+            @foreach($stationsData as $s)
                 <div class="group rounded-xl border border-border bg-card p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-glow">
                     <div class="flex items-center justify-between">
                         <div class="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">

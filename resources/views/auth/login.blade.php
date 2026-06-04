@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#0369a1">
 
-    <title>Masuk — SIM Iklim BMKG Kalbar</title>
-    <meta name="description" content="Masuk ke panel SIM Iklim BMKG Stasiun Klimatologi Kalimantan Barat.">
+    <title>Masuk — Website Informasi Iklim Interaktif BMKG Kalbar</title>
+    <meta name="description" content="Masuk ke panel Website Informasi Iklim Interaktif BMKG Stasiun Klimatologi Kalimantan Barat.">
 
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/bmkg-logo.png" type="image/png">
@@ -30,7 +30,7 @@
             <div class="inline-flex items-center justify-center mb-5">
                 <img src="/bmkg-logo.png" alt="BMKG Logo" class="h-16 w-auto object-contain">
             </div>
-            <h1 class="text-2xl font-bold text-gray-900">Masuk ke SIM Iklim</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Masuk ke Sistem</h1>
             <p class="text-sm text-gray-500 mt-1.5">BMKG Stasiun Klimatologi Kalimantan Barat</p>
         </div>
 
@@ -63,7 +63,11 @@
                         autocomplete="email"
                         autofocus
                         required
-                        class="w-full rounded-xl border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500 @error('email') border-red-400 bg-red-50 @else border-gray-300 bg-white @enderror"
+                        @class([
+                            'w-full rounded-xl border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500',
+                            'border-red-400 bg-red-50' => $errors->has('email'),
+                            'border-gray-300 bg-white' => !$errors->has('email'),
+                        ])
                         placeholder="nama@bmkg.go.id"
                     >
                 </div>
@@ -79,7 +83,11 @@
                         name="password"
                         autocomplete="current-password"
                         required
-                        class="w-full rounded-xl border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500 @error('password') border-red-400 bg-red-50 @else border-gray-300 bg-white @enderror"
+                        @class([
+                            'w-full rounded-xl border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500',
+                            'border-red-400 bg-red-50' => $errors->has('password'),
+                            'border-gray-300 bg-white' => !$errors->has('password'),
+                        ])
                         placeholder="••••••••"
                     >
                     @error('password')

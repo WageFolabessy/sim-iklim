@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Public\StoreCitizenReportRequest;
 use App\Models\CitizenReport;
 use App\Models\ClimateRecord;
+use App\Models\User;
 use App\Models\WeatherAlert;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -19,7 +20,23 @@ class PublicController extends Controller
         $activeAlerts = WeatherAlert::latest()->take(3)->get();
         $recentReports = CitizenReport::latest()->take(5)->get();
 
-        return view('public.home', compact('latestRecord', 'activeAlerts', 'recentReports'));
+        $stationsData = collect();
+        $pengamats = User::where('role', 'pengamat')->get();
+
+        foreach ($pengamats as $pengamat) {
+            $latest = ClimateRecord::where('user_id', $pengamat->id)->latest('recorded_at')->first();
+            if ($latest) {
+                $status = ($latest->rainfall > 20 || $latest->temperature > 34) ? 'waspada' : 'normal';
+                $stationsData->push([
+                    'name' => $pengamat->name,
+                    'temp' => number_format($latest->temperature, 1),
+                    'rain' => number_format($latest->rainfall, 1),
+                    'status' => $status,
+                ]);
+            }
+        }
+
+        return view('public.home', compact('latestRecord', 'activeAlerts', 'recentReports', 'stationsData'));
     }
 
     public function report(): View
@@ -64,12 +81,22 @@ class PublicController extends Controller
 
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
+        $minDate = ClimateRecord::min('recorded_at');
+        $maxDate = ClimateRecord::max('recorded_at');
+        if ($minDate && $maxDate) {
+            $minYear = date('Y', strtotime($minDate));
+            $maxYear = date('Y', strtotime($maxDate));
+            $yearSpan = $minYear === $maxYear ? "Data tahun {$minYear}" : "Data tahun {$minYear} - {$maxYear}";
+        } else {
+            $yearSpan = 'Belum ada data';
+        }
+
         return view('public.statistics', compact(
             'tempAvg', 'tempMin', 'tempMax',
             'humidityAvg', 'humidityMin', 'humidityMax',
             'rainfallAvg', 'rainfallMin', 'rainfallMax',
             'windAvg', 'windMin', 'windMax',
-            'rainData', 'months'
+            'rainData', 'months', 'yearSpan'
         ));
     }
 

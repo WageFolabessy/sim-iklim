@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#0ea5e9">
 
-    <title>@yield('title', 'Informasi Iklim') — SIM Iklim BMKG Kalbar</title>
+    <title>@yield('title', 'Informasi Iklim') — Website Informasi Iklim Interaktif BMKG Kalbar</title>
     <meta name="description" content="@yield('description', 'Informasi iklim terkini Kalimantan Barat dari BMKG Stasiun Klimatologi.')">
 
     <link rel="manifest" href="/manifest.json">

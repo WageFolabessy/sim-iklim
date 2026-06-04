@@ -18,7 +18,7 @@
             <img src="/bmkg-logo.png" alt="BMKG Logo" class="h-10 w-auto object-contain">
         </div>
         <div class="min-w-0">
-            <p class="font-bold text-white tracking-tight leading-none">SIM Iklim</p>
+            <p class="font-bold text-white tracking-tight leading-none">Iklim Interaktif</p>
             <p class="text-xs text-slate-400 mt-0.5 truncate">BMKG Kalbar</p>
         </div>
     </div>

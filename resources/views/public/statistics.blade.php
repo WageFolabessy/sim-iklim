@@ -5,7 +5,7 @@
     <section class="border-b border-border bg-surface">
         <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6">
             <div class="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Data 5 tahun terakhir
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> {{ $yearSpan }}
             </div>
             <h1 class="mt-4 font-display text-3xl font-bold sm:text-4xl">Proyeksi Statistik Historis</h1>
             <p class="mt-2 max-w-2xl text-sm text-muted-foreground">

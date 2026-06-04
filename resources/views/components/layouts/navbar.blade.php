@@ -5,7 +5,7 @@
                 <img src="/bmkg-logo.png" alt="BMKG Logo" class="h-10 w-auto object-contain">
             </div>
             <div class="leading-tight">
-                <div class="font-display text-base font-bold text-foreground">IklimKalbar</div>
+                <div class="font-display text-base font-bold text-foreground">Iklim Interaktif</div>
                 <div class="text-[11px] text-muted-foreground">PMG Kalimantan Barat</div>
             </div>
         </a>

@@ -20,29 +20,37 @@ class CitizenReportSeeder extends Seeder
             'Mempawah', 'Kubu Raya', 'Sanggau', 'Bengkayang',
         ];
 
-        $descriptions = [
-            'Air sungai meluap menggenangi jalan raya hingga 30cm.',
-            'Pohon tumbang menghalangi lalu lintas utama.',
-            'Hujan sangat deras disertai petir, jarak pandang terbatas.',
-            'Kekeringan parah membuat sumur warga mulai surut.',
-            'Angin kencang merusak beberapa atap rumah warga.',
-            'Banjir bandang menerjang perumahan warga di bantaran sungai.',
-            'Hujan badai mengakibatkan atap sekolah rusak.',
-            'Cuaca sangat panas, rawan terjadi kebakaran lahan gambut.',
-            'Angin puting beliung terpantau di daerah pesisir pantai.',
-        ];
-
-        $anomalies = [
-            'flood', 'drought', 'strong_wind', 'other',
+        $scenarios = [
+            'flood' => [
+                'Air sungai meluap menggenangi jalan raya hingga 30cm.',
+                'Banjir bandang menerjang perumahan warga di bantaran sungai.',
+                'Curah hujan tinggi menyebabkan air meluap ke pemukiman.',
+            ],
+            'drought' => [
+                'Kekeringan parah membuat sumur warga mulai surut.',
+                'Cuaca sangat panas, rawan terjadi kebakaran lahan gambut.',
+                'Lahan pertanian warga retak-retak akibat kemarau panjang.',
+            ],
+            'strong_wind' => [
+                'Pohon tumbang menghalangi lalu lintas utama.',
+                'Angin kencang merusak beberapa atap rumah warga.',
+                'Angin puting beliung terpantau di daerah pesisir pantai.',
+            ],
+            'other' => [
+                'Hujan sangat deras disertai petir, jarak pandang terbatas.',
+                'Kabut tebal menyelimuti wilayah ini, jarak pandang di bawah 10 meter.',
+                'Cuaca mendung gelap disertai angin kencang berdurasi pendek.',
+            ],
         ];
 
         $records = [];
         for ($i = 0; $i < 50; $i++) {
+            $type = Arr::random(array_keys($scenarios));
             $records[] = [
-                'anomaly_type' => Arr::random($anomalies),
+                'anomaly_type' => $type,
                 'location' => Arr::random($locations),
-                'description' => Arr::random($descriptions),
-                'created_at' => Carbon::now()->subDays(rand(1, 30))->subMinutes(rand(1, 1440)),
+                'description' => Arr::random($scenarios[$type]),
+                'created_at' => Carbon::now()->subDays(rand(0, 5))->subMinutes(rand(1, 1440)),
                 'updated_at' => Carbon::now(),
             ];
         }
