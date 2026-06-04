@@ -10,7 +10,7 @@
     <meta name="description" content="@yield('description', 'Sistem Informasi Monitoring Iklim BMKG Stasiun Klimatologi Kalimantan Barat')">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/bmkg-logo.png" type="image/png">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

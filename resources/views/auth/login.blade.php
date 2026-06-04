@@ -10,7 +10,7 @@
     <meta name="description" content="Masuk ke panel SIM Iklim BMKG Stasiun Klimatologi Kalimantan Barat.">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/bmkg-logo.png" type="image/png">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -27,10 +27,8 @@
 
         {{-- Logo / Brand --}}
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center bg-sky-600 rounded-2xl w-16 h-16 mb-5 shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z" />
-                </svg>
+            <div class="inline-flex items-center justify-center mb-5">
+                <img src="/bmkg-logo.png" alt="BMKG Logo" class="h-16 w-auto object-contain">
             </div>
             <h1 class="text-2xl font-bold text-gray-900">Masuk ke SIM Iklim</h1>
             <p class="text-sm text-gray-500 mt-1.5">BMKG Stasiun Klimatologi Kalimantan Barat</p>
