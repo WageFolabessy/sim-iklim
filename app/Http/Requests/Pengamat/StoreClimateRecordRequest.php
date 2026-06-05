@@ -21,6 +21,7 @@ class StoreClimateRecordRequest extends FormRequest
             'temperature' => ['required', 'numeric'],
             'humidity' => ['required', 'integer'],
             'rainfall' => ['required', 'numeric'],
+            'wind_speed' => ['required', 'numeric'],
         ];
     }
 
@@ -38,6 +39,8 @@ class StoreClimateRecordRequest extends FormRequest
             'humidity.integer' => 'Kelembaban harus berupa bilangan bulat.',
             'rainfall.required' => 'Curah hujan wajib diisi.',
             'rainfall.numeric' => 'Curah hujan harus berupa angka.',
+            'wind_speed.required' => 'Kecepatan angin wajib diisi.',
+            'wind_speed.numeric' => 'Kecepatan angin harus berupa angka.',
         ];
     }
 
@@ -51,6 +54,7 @@ class StoreClimateRecordRequest extends FormRequest
             'temperature' => 'suhu',
             'humidity' => 'kelembaban',
             'rainfall' => 'curah hujan',
+            'wind_speed' => 'kecepatan angin',
         ];
     }
 }

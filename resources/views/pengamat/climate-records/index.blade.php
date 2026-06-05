@@ -37,7 +37,11 @@
                             value="{{ old('recorded_at', date('Y-m-d')) }}"
                             required
                             max="{{ date('Y-m-d') }}"
-                            class="w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('recorded_at') border-red-400 bg-red-50 @else border-gray-300 @enderror"
+                            @class([
+                                'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500',
+                                'border-red-400 bg-red-50' => $errors->has('recorded_at'),
+                                'border-gray-300' => !$errors->has('recorded_at'),
+                            ])
                         >
                         @error('recorded_at')
                             <p class="mt-1.5 text-xs text-red-600">{{ $message }}</p>
@@ -58,7 +62,11 @@
                             min="-10"
                             max="60"
                             required
-                            class="w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('temperature') border-red-400 bg-red-50 @else border-gray-300 @enderror"
+                            @class([
+                                'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500',
+                                'border-red-400 bg-red-50' => $errors->has('temperature'),
+                                'border-gray-300' => !$errors->has('temperature'),
+                            ])
                             placeholder="mis. 28.50"
                         >
                         @error('temperature')
@@ -79,7 +87,11 @@
                             min="0"
                             max="100"
                             required
-                            class="w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('humidity') border-red-400 bg-red-50 @else border-gray-300 @enderror"
+                            @class([
+                                'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500',
+                                'border-red-400 bg-red-50' => $errors->has('humidity'),
+                                'border-gray-300' => !$errors->has('humidity'),
+                            ])
                             placeholder="mis. 85"
                         >
                         @error('humidity')
@@ -100,10 +112,39 @@
                             step="0.01"
                             min="0"
                             required
-                            class="w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('rainfall') border-red-400 bg-red-50 @else border-gray-300 @enderror"
+                            @class([
+                                'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500',
+                                'border-red-400 bg-red-50' => $errors->has('rainfall'),
+                                'border-gray-300' => !$errors->has('rainfall'),
+                            ])
                             placeholder="mis. 12.50"
                         >
                         @error('rainfall')
+                            <p class="mt-1.5 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Kecepatan Angin --}}
+                    <div>
+                        <label for="wind_speed" class="block text-sm font-medium text-gray-700 mb-1.5">
+                            Kecepatan Angin (km/j) <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            id="wind_speed"
+                            name="wind_speed"
+                            value="{{ old('wind_speed') }}"
+                            step="0.1"
+                            min="0"
+                            required
+                            @class([
+                                'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500',
+                                'border-red-400 bg-red-50' => $errors->has('wind_speed'),
+                                'border-gray-300' => !$errors->has('wind_speed'),
+                            ])
+                            placeholder="mis. 15.5"
+                        >
+                        @error('wind_speed')
                             <p class="mt-1.5 text-xs text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -136,6 +177,7 @@
                             <th class="px-6 py-3 text-right">Suhu (°C)</th>
                             <th class="px-6 py-3 text-right">Kelembapan (%)</th>
                             <th class="px-6 py-3 text-right">Curah Hujan (mm)</th>
+                            <th class="px-6 py-3 text-right">Angin (km/j)</th>
                             <th class="px-6 py-3">Dicatat</th>
                         </tr>
                     </thead>
@@ -154,13 +196,16 @@
                                 <td class="px-6 py-4 text-right text-gray-700 whitespace-nowrap">
                                     {{ number_format($record->rainfall, 2) }}
                                 </td>
+                                <td class="px-6 py-4 text-right text-gray-700 whitespace-nowrap">
+                                    {{ number_format($record->wind_speed, 1) }}
+                                </td>
                                 <td class="px-6 py-4 text-gray-400 text-xs whitespace-nowrap">
                                     {{ $record->created_at->diffForHumans() }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center text-gray-400">
+                                <td colspan="6" class="px-6 py-12 text-center text-gray-400">
                                     Belum ada data yang Anda inputkan.
                                 </td>
                             </tr>
