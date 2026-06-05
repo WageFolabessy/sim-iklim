@@ -81,7 +81,7 @@ class CalculateClimateStatistics extends Command
             'rainData', 'months', 'yearSpan'
         );
 
-        Cache::put('climate_statistics', $dataArray, now()->addHours(24));
+        Cache::put('climate_statistics', $dataArray, now()->addDays(1));
 
         $this->info('Climate statistics calculated and cached.');
     }
