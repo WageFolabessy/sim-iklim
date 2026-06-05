@@ -12,6 +12,21 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/bmkg-logo.png" type="image/png">
 
+    {{-- Open Graph / Facebook / WhatsApp --}}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request()->url() }}">
+    <meta property="og:title" content="@yield('title', 'Dasbor') — Website Informasi Iklim Interaktif BMKG Kalbar">
+    <meta property="og:description" content="@yield('description', 'Sistem Informasi Monitoring Iklim BMKG Stasiun Klimatologi Kalimantan Barat')">
+    <meta property="og:image" content="{{ asset('bmkg-logo.png') }}">
+    <meta property="og:site_name" content="SIM Iklim BMKG Kalbar">
+
+    {{-- Twitter --}}
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="{{ request()->url() }}">
+    <meta name="twitter:title" content="@yield('title', 'Dasbor') — Website Informasi Iklim Interaktif BMKG Kalbar">
+    <meta name="twitter:description" content="@yield('description', 'Sistem Informasi Monitoring Iklim BMKG Stasiun Klimatologi Kalimantan Barat')">
+    <meta name="twitter:image" content="{{ asset('bmkg-logo.png') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <script>

@@ -13,6 +13,21 @@
     <link rel="apple-touch-icon" href="{{ asset('icons/icon.svg') }}">
     <link rel="icon" href="/bmkg-logo.png" type="image/png">
 
+    {{-- Open Graph / Facebook / WhatsApp --}}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request()->url() }}">
+    <meta property="og:title" content="@yield('title', 'Informasi Iklim') — Website Informasi Iklim Interaktif BMKG Kalbar">
+    <meta property="og:description" content="@yield('description', 'Informasi iklim terkini Kalimantan Barat dari BMKG Stasiun Klimatologi.')">
+    <meta property="og:image" content="{{ asset('bmkg-logo.png') }}">
+    <meta property="og:site_name" content="SIM Iklim BMKG Kalbar">
+
+    {{-- Twitter --}}
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="{{ request()->url() }}">
+    <meta name="twitter:title" content="@yield('title', 'Informasi Iklim') — Website Informasi Iklim Interaktif BMKG Kalbar">
+    <meta name="twitter:description" content="@yield('description', 'Informasi iklim terkini Kalimantan Barat dari BMKG Stasiun Klimatologi.')">
+    <meta name="twitter:image" content="{{ asset('bmkg-logo.png') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
