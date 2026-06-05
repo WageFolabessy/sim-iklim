@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\CitizenReportController as AdminCitizenReportController;
+use App\Http\Controllers\Admin\ClimateRecordValidationController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WeatherAlertController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pengamat\ClimateRecordController;
@@ -50,6 +52,8 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function (): void {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::patch('/climate-records/{id}/approve', [ClimateRecordValidationController::class, 'approve'])->name('climate-records.approve');
         Route::get('/laporan', [AdminCitizenReportController::class, 'index'])->name('citizen-reports.index');
         Route::patch('/laporan/{report}/status', [AdminCitizenReportController::class, 'updateStatus'])->name('citizen-reports.update-status');
         Route::post('/peringatan', [WeatherAlertController::class, 'trigger'])->name('weather-alerts.trigger');

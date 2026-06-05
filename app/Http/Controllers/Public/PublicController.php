@@ -12,6 +12,8 @@ use App\Models\WeatherAlert;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -41,51 +43,14 @@ class PublicController extends Controller
 
     public function statistics(): View
     {
-        $tempAvg = ClimateRecord::avg('temperature') ?? 0;
-        $tempMin = ClimateRecord::min('temperature') ?? 0;
-        $tempMax = ClimateRecord::max('temperature') ?? 0;
+        $stats = Cache::get('climate_statistics');
 
-        $humidityAvg = ClimateRecord::avg('humidity') ?? 0;
-        $humidityMin = ClimateRecord::min('humidity') ?? 0;
-        $humidityMax = ClimateRecord::max('humidity') ?? 0;
-
-        $rainfallAvg = ClimateRecord::avg('rainfall') ?? 0;
-        $rainfallMin = ClimateRecord::min('rainfall') ?? 0;
-        $rainfallMax = ClimateRecord::max('rainfall') ?? 0;
-
-        $windAvg = ClimateRecord::avg('wind_speed') ?? 0;
-        $windMin = ClimateRecord::min('wind_speed') ?? 0;
-        $windMax = ClimateRecord::max('wind_speed') ?? 0;
-
-        $monthlyRainfall = ClimateRecord::selectRaw('MONTH(recorded_at) as month, AVG(rainfall) as avg_rain')
-            ->groupBy('month')
-            ->pluck('avg_rain', 'month')
-            ->toArray();
-
-        $rainData = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $rainData[] = round($monthlyRainfall[$i] ?? 0, 1);
+        if (! $stats) {
+            \Illuminate\Support\Facades\Artisan::call('climate:calculate-stats');
+            $stats = Cache::get('climate_statistics');
         }
 
-        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-
-        $minDate = ClimateRecord::min('recorded_at');
-        $maxDate = ClimateRecord::max('recorded_at');
-        if ($minDate && $maxDate) {
-            $minYear = date('Y', strtotime($minDate));
-            $maxYear = date('Y', strtotime($maxDate));
-            $yearSpan = $minYear === $maxYear ? "Data tahun {$minYear}" : "Data tahun {$minYear} - {$maxYear}";
-        } else {
-            $yearSpan = 'Belum ada data';
-        }
-
-        return view('public.statistics', compact(
-            'tempAvg', 'tempMin', 'tempMax',
-            'humidityAvg', 'humidityMin', 'humidityMax',
-            'rainfallAvg', 'rainfallMin', 'rainfallMax',
-            'windAvg', 'windMin', 'windMax',
-            'rainData', 'months', 'yearSpan'
-        ));
+        return view('public.statistics', $stats);
     }
 
     public function storeCitizenReport(StoreCitizenReportRequest $request): RedirectResponse

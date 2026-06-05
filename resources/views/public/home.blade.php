@@ -39,7 +39,7 @@
             </div>
 
             {{-- Current climate card --}}
-            <div class="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md shadow-glow">
+            <div id="live-climate-card" class="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md shadow-glow transition-all duration-300">
                 <div class="flex items-start justify-between">
                     <div>
                         <div class="text-xs uppercase tracking-wider text-white/70">Kondisi Saat Ini</div>
@@ -50,7 +50,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 animate-pulse text-success"><circle cx="12" cy="12" r="2"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.48"/><path d="M16.24 7.76a6 6 0 0 1 0 8.48"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
                 </div>
                 <div class="mt-4 flex items-baseline gap-3">
-                    <div class="font-display text-7xl font-bold text-white">{{ isset($latestRecord) ? number_format($latestRecord->temperature, 1) : '--' }}°</div>
+                    <div class="font-display text-7xl font-bold text-white"><span id="live-temp">{{ isset($latestRecord) ? number_format($latestRecord->temperature, 1) : '--' }}</span>°</div>
                     <div class="pb-2 text-sm text-white/80">Suhu Udara</div>
                 </div>
                 <div class="mt-5 grid grid-cols-2 gap-2.5">
@@ -59,7 +59,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M12 22a5 5 0 0 0 5-5c0-2-5-10-5-10S7 15 7 17a5 5 0 0 0 5 5Z"/></svg> Kelembapan
                         </div>
                         <div class="mt-2 flex items-baseline gap-1">
-                            <span class="text-3xl font-bold text-white">{{ $latestRecord->humidity ?? '--' }}</span>
+                            <span id="live-humidity" class="text-3xl font-bold text-white">{{ $latestRecord->humidity ?? '--' }}</span>
                             <span class="text-sm text-white/70">%</span>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg> Curah Hujan
                         </div>
                         <div class="mt-2 flex items-baseline gap-1">
-                            <span class="text-3xl font-bold text-white">{{ isset($latestRecord) ? number_format($latestRecord->rainfall, 1) : '--' }}</span>
+                            <span id="live-rainfall" class="text-3xl font-bold text-white">{{ isset($latestRecord) ? number_format($latestRecord->rainfall, 1) : '--' }}</span>
                             <span class="text-sm text-white/70">mm</span>
                         </div>
                         <div class="mt-1 text-[11px] text-white/60">24 jam terakhir</div>
@@ -299,6 +299,27 @@
                             newRow.style.transition = 'background 1.5s ease';
                             newRow.style.background = 'transparent';
                         }, 100);
+                    }
+                });
+
+            window.Echo.channel('climate-data')
+                .listen('ClimateDataPublished', function (event) {
+                    var record = event.climateRecord;
+                    
+                    var tempEl = document.getElementById('live-temp');
+                    var humEl = document.getElementById('live-humidity');
+                    var rainEl = document.getElementById('live-rainfall');
+                    var card = document.getElementById('live-climate-card');
+
+                    if (tempEl) tempEl.textContent = parseFloat(record.temperature).toFixed(1);
+                    if (humEl) humEl.textContent = record.humidity;
+                    if (rainEl) rainEl.textContent = parseFloat(record.rainfall).toFixed(1);
+
+                    if (card) {
+                        card.style.background = 'rgba(255, 255, 255, 0.3)';
+                        setTimeout(function() {
+                            card.style.background = 'rgba(255, 255, 255, 0.1)';
+                        }, 300);
                     }
                 });
 

@@ -115,6 +115,28 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Gagal mengaktifkan notifikasi: ' + error.message);
         }
     });
+
+    async function checkSubscriptionStatus() {
+        if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+            return;
+        }
+        
+        try {
+            const swReg = await navigator.serviceWorker.ready;
+            const subscription = await swReg.pushManager.getSubscription();
+            
+            if (subscription && btn) {
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Notifikasi Aktif';
+                btn.classList.remove('bg-primary');
+                btn.classList.add('bg-success', 'text-success-foreground');
+                btn.disabled = true;
+            }
+        } catch (error) {
+            console.error('Failed to check push subscription status:', error);
+        }
+    }
+
+    checkSubscriptionStatus();
 });
 </script>
 @endsection

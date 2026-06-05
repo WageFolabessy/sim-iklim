@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['user_id', 'recorded_at', 'temperature', 'humidity', 'rainfall'])]
+#[Fillable(['user_id', 'recorded_at', 'temperature', 'humidity', 'rainfall', 'wind_speed', 'status'])]
 class ClimateRecord extends Model
 {
     use HasFactory;

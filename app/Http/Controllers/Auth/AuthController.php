@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,11 +33,15 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        if ($user->isAdmin()) {
-            return redirect()->route('admin.citizen-reports.index');
+        if ($user->role === UserRole::Admin) {
+            return redirect()->route('admin.dashboard');
         }
 
-        return redirect()->route('pengamat.climate-records.index');
+        if ($user->role === UserRole::Pengamat) {
+            return redirect()->route('pengamat.dashboard');
+        }
+
+        return redirect()->route('home');
     }
 
     public function logout(Request $request): RedirectResponse
