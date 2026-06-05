@@ -7,8 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Public\StoreCitizenReportRequest;
 use App\Models\CitizenReport;
 use App\Models\ClimateRecord;
+use App\Models\User;
 use App\Models\WeatherAlert;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PublicController extends Controller
@@ -30,8 +34,9 @@ class PublicController extends Controller
     public function alerts(): View
     {
         $alerts = WeatherAlert::latest()->get();
+        $vapidPublicKey = config('webpush.vapid.public_key');
 
-        return view('public.alerts', compact('alerts'));
+        return view('public.alerts', compact('alerts', 'vapidPublicKey'));
     }
 
     public function statistics(): View
@@ -90,5 +95,24 @@ class PublicController extends Controller
         CitizenReportSubmitted::dispatch($report);
 
         return back()->with('success', 'Laporan Anda berhasil dikirim. Terima kasih.');
+    }
+
+    public function subscribePush(Request $request): JsonResponse
+    {
+        $endpoint = $request->input('endpoint');
+        $email = hash('sha256', $endpoint).'@device.local';
+
+        $user = User::firstOrCreate(
+            ['email' => $email],
+            ['name' => 'Device Visitor', 'password' => bcrypt(Str::random(16))]
+        );
+
+        $user->updatePushSubscription(
+            $endpoint,
+            $request->input('keys.p256dh'),
+            $request->input('keys.auth')
+        );
+
+        return response()->json(['success' => true]);
     }
 }

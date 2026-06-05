@@ -194,7 +194,7 @@
         </div>
         
         @if($recentReports->isNotEmpty())
-        <div class="mt-6 divide-y divide-border rounded-xl border border-border bg-card shadow-card">
+        <div id="live-reports-container" class="mt-6 divide-y divide-border rounded-xl border border-border bg-card shadow-card">
             @foreach($recentReports as $report)
                 @php
                     $anomalyValue = $report->anomaly_type instanceof \App\Enums\AnomalyType ? $report->anomaly_type->value : $report->anomaly_type;
@@ -229,10 +229,85 @@
             @endforeach
         </div>
         @else
-        <div class="mt-6 rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+        <div id="live-reports-container" class="mt-6 rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
             Belum ada laporan cuaca dari warga.
         </div>
         @endif
     </section>
+
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof window.Echo === 'undefined') {
+                return;
+            }
+
+            var labels = {
+                flood: 'Banjir',
+                drought: 'Kekeringan',
+                strong_wind: 'Angin Kencang',
+                heavy_rain: 'Hujan Lebat/Lainnya'
+            };
+
+            var badges = {
+                flood: 'bg-info/15 text-info',
+                strong_wind: 'bg-warning/20 text-warning-foreground'
+            };
+
+            var defaultBadge = 'bg-destructive/15 text-destructive';
+
+            window.Echo.channel('citizen-reports')
+                .listen('CitizenReportSubmitted', function (event) {
+                    var report = event.citizenReport;
+                    var type = report.anomaly_type;
+                    var label = labels[type] || 'Hujan Lebat/Lainnya';
+                    var badgeClass = badges[type] || defaultBadge;
+
+                    var html = '<div class="flex flex-col sm:flex-row items-start gap-4 p-5 live-report-new" style="background: hsl(var(--primary) / 0.04);">' +
+                        '<div class="w-full sm:w-48 shrink-0 pt-1">' +
+                            '<span class="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ' + badgeClass + '">' +
+                                label +
+                            '</span>' +
+                        '</div>' +
+                        '<div class="min-w-0 flex-1">' +
+                            '<div class="flex flex-wrap items-center gap-2 text-sm font-semibold text-foreground">' +
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> ' + escapeHtml(report.location) +
+                            '</div>' +
+                            '<p class="mt-1 text-sm text-muted-foreground">' + escapeHtml(report.description) + '</p>' +
+                        '</div>' +
+                        '<div class="inline-flex items-center gap-1 text-xs text-muted-foreground">' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Baru saja' +
+                        '</div>' +
+                    '</div>';
+
+                    var container = document.getElementById('live-reports-container');
+                    if (!container) {
+                        return;
+                    }
+
+                    // If container was in empty state, reset it to list mode
+                    if (container.classList.contains('text-center')) {
+                        container.className = 'mt-6 divide-y divide-border rounded-xl border border-border bg-card shadow-card';
+                        container.innerHTML = '';
+                    }
+
+                    container.insertAdjacentHTML('afterbegin', html);
+
+                    // Highlight animation
+                    var newRow = container.firstElementChild;
+                    if (newRow) {
+                        setTimeout(function () {
+                            newRow.style.transition = 'background 1.5s ease';
+                            newRow.style.background = 'transparent';
+                        }, 100);
+                    }
+                });
+
+            function escapeHtml(text) {
+                var div = document.createElement('div');
+                div.appendChild(document.createTextNode(text || ''));
+                return div.innerHTML;
+            }
+        });
+    </script>
 
 @endsection

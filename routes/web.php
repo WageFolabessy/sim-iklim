@@ -16,8 +16,8 @@ Route::get('/statistik', [PublicController::class, 'statistics'])->name('statist
 Route::get('/laporkan', [PublicController::class, 'report'])->name('laporkan');
 Route::get('/peringatan', [PublicController::class, 'alerts'])->name('peringatan');
 Route::post('/laporan-warga', [PublicController::class, 'storeCitizenReport'])->name('citizen-reports.store');
+Route::post('/subscribe-push', [PublicController::class, 'subscribePush'])->name('push.subscribe');
 Route::view('/offline', 'public.offline')->name('offline');
-
 // ---------------------------------------------------------------------------
 // Auth routes
 // ---------------------------------------------------------------------------

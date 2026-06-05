@@ -65,3 +65,31 @@ self.addEventListener('fetch', event => {
             })
     );
 });
+
+// Push Event: Handle incoming push notifications
+self.addEventListener('push', event => {
+    if (!event.data) return;
+
+    try {
+        const data = event.data.json();
+        event.waitUntil(
+            self.registration.showNotification(data.title, {
+                body: data.body,
+                icon: data.icon,
+                data: data.data
+            })
+        );
+    } catch (e) {
+        console.error('Error parsing push data', e);
+    }
+});
+
+// Notification Click Event: Open the target URL
+self.addEventListener('notificationclick', event => {
+    event.notification.close();
+    if (event.notification.data && event.notification.data.url) {
+        event.waitUntil(
+            clients.openWindow(event.notification.data.url)
+        );
+    }
+});
