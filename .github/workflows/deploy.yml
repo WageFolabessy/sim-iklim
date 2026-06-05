@@ -1,0 +1,38 @@
+name: Deploy to DigitalOcean Droplet
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute deployment commands via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/sim-iklim
+            
+            # Tarik kode terbaru dari GitHub
+            git pull origin main
+            
+            # Update dependencies
+            composer install --no-dev --optimize-autoloader
+            npm install
+            npm run build
+            
+            # Update database & cache
+            php artisan migrate --force
+            php artisan optimize
+            
+            # Pastikan permission aman
+            chown -R www-data:www-data /var/www/sim-iklim
+            
+            # Restart services agar kode baru langsung aktif
+            systemctl restart php8.4-fpm
+            supervisorctl restart all
