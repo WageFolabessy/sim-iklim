@@ -14,7 +14,7 @@ class TriggerWeatherAlertRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'level' => ['required', 'string', 'in:bahaya,waspada,info'],
+            'level' => ['required', 'string', 'in:waspada,siaga,awas'],
             'title' => ['required', 'string', 'max:255'],
             'area' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
