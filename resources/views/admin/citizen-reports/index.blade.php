@@ -27,27 +27,91 @@
                 </div>
             </div>
 
+            @if(session('success'))
+                <div class="mx-6 mt-6 mb-2 p-4 bg-green-100 text-green-700 rounded-lg">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="mx-6 mt-6 mb-2 p-4 bg-red-100 text-red-700 rounded-lg">{{ session('error') }}</div>
+            @endif
+
             <form method="POST" action="{{ route('admin.weather-alerts.trigger') }}" class="p-6" novalidate>
                 @csrf
 
                 <div class="mb-5">
-                    <label for="message" class="block text-sm font-medium text-gray-700 mb-1.5">
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1.5">
+                        Judul Peringatan <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="title" name="title" value="{{ old('title') }}" required
+                        @class([
+                            'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400',
+                            'border-red-400 bg-red-50' => $errors->has('title'),
+                            'border-gray-300' => !$errors->has('title'),
+                        ])
+                        placeholder="Contoh: Peringatan Dini Cuaca Ekstrem Kalbar"
+                    >
+                    @error('title')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                    <div>
+                        <label for="level" class="block text-sm font-medium text-gray-700 mb-1.5">
+                            Level Bahaya <span class="text-red-500">*</span>
+                        </label>
+                        <select id="level" name="level" required
+                            @class([
+                                'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400',
+                                'border-red-400 bg-red-50' => $errors->has('level'),
+                                'border-gray-300' => !$errors->has('level'),
+                            ])
+                        >
+                            <option value="">Pilih Level...</option>
+                            <option value="waspada" {{ old('level') == 'waspada' ? 'selected' : '' }}>Waspada (Kuning)</option>
+                            <option value="siaga" {{ old('level') == 'siaga' ? 'selected' : '' }}>Siaga (Oranye)</option>
+                            <option value="awas" {{ old('level') == 'awas' ? 'selected' : '' }}>Awas (Merah)</option>
+                        </select>
+                        @error('level')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="area" class="block text-sm font-medium text-gray-700 mb-1.5">
+                            Cakupan Area <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="area" name="area" value="{{ old('area') }}" required
+                            @class([
+                                'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400',
+                                'border-red-400 bg-red-50' => $errors->has('area'),
+                                'border-gray-300' => !$errors->has('area'),
+                            ])
+                            placeholder="Contoh: Pontianak, Kubu Raya"
+                        >
+                        @error('area')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label for="body" class="block text-sm font-medium text-gray-700 mb-1.5">
                         Pesan Peringatan <span class="text-red-500">*</span>
                     </label>
                     <textarea
-                        id="message"
-                        name="message"
+                        id="body"
+                        name="body"
                         rows="3"
                         required
                         @class([
                             'w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none',
-                            'border-red-400 bg-red-50' => $errors->has('message'),
-                            'border-gray-300' => !$errors->has('message'),
+                            'border-red-400 bg-red-50' => $errors->has('body'),
+                            'border-gray-300' => !$errors->has('body'),
                         ])
-                        placeholder="Contoh: Peringatan cuaca ekstrem — Waspada hujan lebat dan angin kencang di wilayah Pontianak dan sekitarnya dalam 6 jam ke depan."
-                    >{{ old('message') }}</textarea>
-                    @error('message')
-                        <p class="mt-1.5 text-xs text-red-600">{{ $message }}</p>
+                        placeholder="Contoh: Peringatan cuaca ekstrem — Waspada hujan lebat dan angin kencang dalam 6 jam ke depan."
+                    >{{ old('body') }}</textarea>
+                    @error('body')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
