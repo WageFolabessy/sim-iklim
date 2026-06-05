@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\ClimateRecord;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class CalculateClimateStatistics extends Command
 {
@@ -29,21 +30,25 @@ class CalculateClimateStatistics extends Command
     {
         $query = ClimateRecord::where('status', 'published');
 
-        $tempAvg = $query->avg('temperature') ?? 0;
-        $tempMin = $query->min('temperature') ?? 0;
-        $tempMax = $query->max('temperature') ?? 0;
+        $tempAvg = (float) ($query->avg('temperature') ?? 0);
+        $tempMin = (float) ($query->min('temperature') ?? 0);
+        $tempMax = (float) ($query->max('temperature') ?? 0);
+        $tempStddev = (float) ClimateRecord::where('status', 'published')->select(DB::raw('COALESCE(ROUND(STDDEV(temperature), 1), 0) as v'))->value('v');
 
-        $humidityAvg = $query->avg('humidity') ?? 0;
-        $humidityMin = $query->min('humidity') ?? 0;
-        $humidityMax = $query->max('humidity') ?? 0;
+        $humidityAvg = (float) ($query->avg('humidity') ?? 0);
+        $humidityMin = (float) ($query->min('humidity') ?? 0);
+        $humidityMax = (float) ($query->max('humidity') ?? 0);
+        $humidityStddev = (float) ClimateRecord::where('status', 'published')->select(DB::raw('COALESCE(ROUND(STDDEV(humidity), 1), 0) as v'))->value('v');
 
-        $rainfallAvg = $query->avg('rainfall') ?? 0;
-        $rainfallMin = $query->min('rainfall') ?? 0;
-        $rainfallMax = $query->max('rainfall') ?? 0;
+        $rainfallAvg = (float) ($query->avg('rainfall') ?? 0);
+        $rainfallMin = (float) ($query->min('rainfall') ?? 0);
+        $rainfallMax = (float) ($query->max('rainfall') ?? 0);
+        $rainfallStddev = (float) ClimateRecord::where('status', 'published')->select(DB::raw('COALESCE(ROUND(STDDEV(rainfall), 1), 0) as v'))->value('v');
 
-        $windAvg = $query->avg('wind_speed') ?? 0;
-        $windMin = $query->min('wind_speed') ?? 0;
-        $windMax = $query->max('wind_speed') ?? 0;
+        $windAvg = (float) ($query->avg('wind_speed') ?? 0);
+        $windMin = (float) ($query->min('wind_speed') ?? 0);
+        $windMax = (float) ($query->max('wind_speed') ?? 0);
+        $windStddev = (float) ClimateRecord::where('status', 'published')->select(DB::raw('COALESCE(ROUND(STDDEV(wind_speed), 1), 0) as v'))->value('v');
 
         $monthlyRainfall = ClimateRecord::where('status', 'published')
             ->selectRaw('MONTH(recorded_at) as month, AVG(rainfall) as avg_rain')
@@ -69,10 +74,10 @@ class CalculateClimateStatistics extends Command
         }
 
         $dataArray = compact(
-            'tempAvg', 'tempMin', 'tempMax',
-            'humidityAvg', 'humidityMin', 'humidityMax',
-            'rainfallAvg', 'rainfallMin', 'rainfallMax',
-            'windAvg', 'windMin', 'windMax',
+            'tempAvg', 'tempMin', 'tempMax', 'tempStddev',
+            'humidityAvg', 'humidityMin', 'humidityMax', 'humidityStddev',
+            'rainfallAvg', 'rainfallMin', 'rainfallMax', 'rainfallStddev',
+            'windAvg', 'windMin', 'windMax', 'windStddev',
             'rainData', 'months', 'yearSpan'
         );
 

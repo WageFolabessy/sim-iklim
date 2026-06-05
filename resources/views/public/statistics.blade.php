@@ -35,6 +35,13 @@
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Max</div>
                         <div class="mt-0.5 text-base font-bold text-destructive">{{ number_format($tempMax, 1) }}°C</div>
                     </div>
+                    <div class="col-span-2 border-t border-border pt-3">
+                        <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Fluktuasi (Std Dev)</div>
+                        <div class="mt-0.5 flex items-baseline justify-center gap-1.5">
+                            <span class="text-base font-bold text-warning">{{ number_format($tempStddev, 1) }}°C</span>
+                        </div>
+                        <div class="mt-1 text-[10px] text-muted-foreground/70">*Angka kecil = stabil, angka besar = fluktuatif</div>
+                    </div>
                 </div>
             </div>
             
@@ -56,6 +63,13 @@
                     <div class="border-l border-border">
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Max</div>
                         <div class="mt-0.5 text-base font-bold text-destructive">{{ number_format($humidityMax, 0) }}%</div>
+                    </div>
+                    <div class="col-span-2 border-t border-border pt-3">
+                        <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Fluktuasi (Std Dev)</div>
+                        <div class="mt-0.5 flex items-baseline justify-center gap-1.5">
+                            <span class="text-base font-bold text-warning">{{ number_format($humidityStddev, 1) }}%</span>
+                        </div>
+                        <div class="mt-1 text-[10px] text-muted-foreground/70">*Angka kecil = stabil, angka besar = fluktuatif</div>
                     </div>
                 </div>
             </div>
@@ -79,6 +93,13 @@
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Max</div>
                         <div class="mt-0.5 text-base font-bold text-destructive">{{ number_format($rainfallMax, 1) }}mm</div>
                     </div>
+                    <div class="col-span-2 border-t border-border pt-3">
+                        <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Fluktuasi (Std Dev)</div>
+                        <div class="mt-0.5 flex items-baseline justify-center gap-1.5">
+                            <span class="text-base font-bold text-warning">{{ number_format($rainfallStddev, 1) }}mm</span>
+                        </div>
+                        <div class="mt-1 text-[10px] text-muted-foreground/70">*Angka kecil = stabil, angka besar = ekstrem</div>
+                    </div>
                 </div>
             </div>
 
@@ -100,6 +121,13 @@
                     <div class="border-l border-border">
                         <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Max</div>
                         <div class="mt-0.5 text-base font-bold text-destructive">{{ number_format($windMax, 1) }}km/j</div>
+                    </div>
+                    <div class="col-span-2 border-t border-border pt-3">
+                        <div class="text-[11px] uppercase tracking-wider text-muted-foreground">Fluktuasi (Std Dev)</div>
+                        <div class="mt-0.5 flex items-baseline justify-center gap-1.5">
+                            <span class="text-base font-bold text-warning">{{ number_format($windStddev, 1) }}km/j</span>
+                        </div>
+                        <div class="mt-1 text-[10px] text-muted-foreground/70">*Angka kecil = stabil, angka besar = ekstrem</div>
                     </div>
                 </div>
             </div>
