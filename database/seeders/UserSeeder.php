@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'admin@pmg.com'],
             [
-                'name' => 'Riko',
+                'name' => 'Administrator',
                 'password' => bcrypt('password'),
                 'role' => 'admin',
             ]

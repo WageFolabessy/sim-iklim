@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground">
-            © {{ date('Y') }} Pusat Meteorologi & Geofisika Kalimantan Barat. Data resmi PMG.
+            © {{ date('Y') }} Pusat Meteorologi & Geofisika Kalimantan Barat.
         </div>
     </div>
 </footer>

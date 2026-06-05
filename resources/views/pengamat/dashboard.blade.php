@@ -15,11 +15,10 @@
         <div class="relative">
             <p class="text-sky-100 text-sm font-medium mb-1">BMKG Stasiun Klimatologi Kalimantan Barat</p>
             <h1 class="text-2xl md:text-3xl font-bold leading-tight mb-2">
-                Selamat Datang,<br>{{ auth()->user()->name }}
+                Selamat Datang, <span class="block md:inline">{{ auth()->user()->name }}</span>
             </h1>
-            <p class="text-sky-100 text-sm max-w-md">
-                Gunakan panel ini untuk mencatat dan memantau data iklim harian Anda.
-                Data yang Anda input akan tersedia secara publik dan real-time.
+            <p class="text-sky-100 text-sm max-w-md md:max-w-none">
+                Gunakan panel ini untuk mencatat dan memantau data iklim harian Anda. Data yang Anda input akan tersedia secara publik dan real-time.
             </p>
         </div>
     </section>
@@ -86,7 +85,7 @@
         </svg>
         <p>
             Data yang Anda inputkan akan tersedia secara publik melalui
-            <a href="{{ route('climate-data') }}" target="_blank" class="font-semibold underline hover:text-sky-600">Portal Data Iklim</a>
+            <a href="{{ route('home') }}" target="_blank" class="font-semibold underline hover:text-sky-600">Portal Data Iklim</a>
             dan akan diperbarui secara langsung di portal publik.
         </p>
     </section>
