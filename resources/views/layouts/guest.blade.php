@@ -69,10 +69,10 @@
 
             window.Echo.channel('weather-alerts')
                 .listen('WeatherAlertBroadcasted', function (event) {
-                    showWeatherAlertToast(event.message);
+                    showWeatherAlertToast(event.alert);
                 });
 
-            function showWeatherAlertToast(message) {
+            function showWeatherAlertToast(alert) {
                 var toast = document.createElement('div');
                 toast.setAttribute('role', 'alert');
                 toast.setAttribute('aria-live', 'assertive');
@@ -93,8 +93,8 @@
                         '</svg>' +
                     '</div>' +
                     '<div class="flex-1 min-w-0">' +
-                        '<p class="font-semibold text-sm leading-snug">Peringatan Cuaca Ekstrem</p>' +
-                        '<p class="text-xs text-orange-100 mt-0.5 leading-relaxed">' + escapeHtml(message) + '</p>' +
+                        '<p class="font-semibold text-sm leading-snug">Peringatan: ' + escapeHtml(alert.title) + '</p>' +
+                        '<p class="text-xs text-orange-100 mt-0.5 leading-relaxed"><strong>' + escapeHtml(alert.area) + '</strong> - ' + escapeHtml(alert.body) + '</p>' +
                     '</div>' +
                     '<button onclick="this.parentElement.remove()" class="shrink-0 text-white/70 hover:text-white transition-colors cursor-pointer" aria-label="Tutup peringatan">' +
                         '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">' +
