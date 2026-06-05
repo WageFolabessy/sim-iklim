@@ -80,6 +80,10 @@
                 </table>
             </div>
         </div>
+
+        <div class="mt-4">
+            {{ $pendingRecords->links() }}
+        </div>
     </section>
 </div>
 @endsection

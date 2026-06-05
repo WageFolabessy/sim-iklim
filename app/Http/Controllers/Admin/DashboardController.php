@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $pendingRecords = ClimateRecord::with('user')
             ->where('status', 'pending')
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return view('admin.dashboard', compact('activeAlerts', 'citizenReports', 'climateRecords', 'pendingRecords'));
     }
