@@ -6,7 +6,10 @@
                     <div class="shrink-0 flex items-center justify-center">
                         <img src="/bmkg-logo.png" alt="BMKG Logo" class="h-10 w-auto object-contain">
                     </div>
-                    <span class="font-display text-base font-bold text-foreground">Iklim Interaktif</span>
+                    <div class="leading-tight">
+                        <div class="font-display text-base font-bold text-foreground">Iklim Interaktif</div>
+                        <div class="text-[11px] text-muted-foreground">PMG Kalimantan Barat</div>
+                    </div>
                 </div>
                 <p class="mt-3 text-sm text-muted-foreground">
                     Portal informasi iklim & cuaca resmi untuk petani, nelayan, dan masyarakat Kalimantan Barat.
