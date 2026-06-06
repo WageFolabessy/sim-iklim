@@ -66,7 +66,7 @@
                 <div class="shrink-0">
                     <a
                         href="{{ route('pengamat.climate-records.index') }}"
-                        class="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold px-6 py-3 rounded-xl shadow-sm transition-colors"
+                        class="cursor-pointer inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold px-6 py-3 rounded-xl shadow-sm transition-colors"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -85,7 +85,7 @@
         </svg>
         <p>
             Data yang Anda inputkan akan tersedia secara publik melalui
-            <a href="{{ route('home') }}" target="_blank" class="font-semibold underline hover:text-sky-600">Portal Data Iklim</a>
+            <a href="{{ route('home') }}" target="_blank" class="cursor-pointer font-semibold underline hover:text-sky-600">Portal Data Iklim</a>
             dan akan diperbarui secara langsung di portal publik.
         </p>
     </section>

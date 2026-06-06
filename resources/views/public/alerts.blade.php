@@ -18,29 +18,6 @@
                 Diterbitkan dan diperbarui langsung oleh tim PMG Kalbar. Notifikasi peringatan akan muncul otomatis di perangkat Anda.
             </p>
 
-            <div class="mt-8 flex flex-wrap items-center gap-2">
-                <span class="text-sm font-medium text-foreground mr-2">Filter Level:</span>
-                <a href="{{ route('peringatan') }}"
-                   class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
-                   {{ !request()->has('level') ? 'bg-primary border-primary text-primary-foreground shadow-glow' : 'bg-background border-border text-muted-foreground hover:border-primary/50 hover:text-foreground' }}">
-                    Semua
-                </a>
-                <a href="{{ route('peringatan', ['level' => 'info']) }}"
-                   class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
-                   {{ request('level') === 'info' ? 'bg-info/20 border-info text-info shadow-sm' : 'bg-background border-border text-muted-foreground hover:border-info/50 hover:text-foreground' }}">
-                    Info
-                </a>
-                <a href="{{ route('peringatan', ['level' => 'waspada']) }}"
-                   class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
-                   {{ request('level') === 'waspada' ? 'bg-warning/20 border-warning text-warning-foreground shadow-sm' : 'bg-background border-border text-muted-foreground hover:border-warning/50 hover:text-foreground' }}">
-                    Waspada
-                </a>
-                <a href="{{ route('peringatan', ['level' => 'bahaya']) }}"
-                   class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
-                   {{ request('level') === 'bahaya' ? 'bg-destructive/20 border-destructive text-destructive shadow-sm' : 'bg-background border-border text-muted-foreground hover:border-destructive/50 hover:text-foreground' }}">
-                    Bahaya
-                </a>
-            </div>
         </div>
     </section>
 
@@ -56,10 +33,35 @@
                     <p class="text-xs text-muted-foreground">Anda menerima peringatan instan.</p>
                 </div>
             </div>
-            <button id="btn-unsubscribe" onclick="unsubscribePush()" class="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30">
+            <button id="btn-unsubscribe" onclick="unsubscribePush()" class="cursor-pointer inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M18.36 6.64A9 9 0 0 1 20.77 15"/><path d="M6.16 6.16a9 9 0 1 0 12.68 12.68"/><path d="M12 2v4"/><path d="m2 2 20 20"/></svg>
                 Berhenti
             </button>
+        </div>
+
+        {{-- Filter Level --}}
+        <div class="mb-6 flex flex-wrap items-center gap-2 pb-2">
+            <span class="text-sm font-medium text-foreground mr-2">Filter Level:</span>
+            <a href="{{ route('peringatan') }}"
+               class="cursor-pointer inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
+               {{ !request()->has('level') ? 'bg-primary border-primary text-primary-foreground shadow-glow' : 'bg-background border-border text-muted-foreground hover:border-primary/50 hover:text-foreground' }}">
+                Semua
+            </a>
+            <a href="{{ route('peringatan', ['level' => 'info']) }}"
+               class="cursor-pointer inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
+               {{ request('level') === 'info' ? 'bg-info/20 border-info text-info shadow-sm' : 'bg-background border-border text-muted-foreground hover:border-info/50 hover:text-foreground' }}">
+                Info
+            </a>
+            <a href="{{ route('peringatan', ['level' => 'waspada']) }}"
+               class="cursor-pointer inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
+               {{ request('level') === 'waspada' ? 'bg-warning/20 border-warning text-warning-foreground shadow-sm' : 'bg-background border-border text-muted-foreground hover:border-warning/50 hover:text-foreground' }}">
+                Waspada
+            </a>
+            <a href="{{ route('peringatan', ['level' => 'bahaya']) }}"
+               class="cursor-pointer inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
+               {{ request('level') === 'bahaya' ? 'bg-destructive/20 border-destructive text-destructive shadow-sm' : 'bg-background border-border text-muted-foreground hover:border-destructive/50 hover:text-foreground' }}">
+                Bahaya
+            </a>
         </div>
         @forelse($alerts as $a)
             <article class="overflow-hidden rounded-xl border bg-card shadow-card {{ $a->level === 'bahaya' ? 'border-destructive/40' : ($a->level === 'waspada' ? 'border-warning/50' : 'border-info/40') }}">
