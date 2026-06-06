@@ -36,6 +36,7 @@
                 <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100">
                         <tr>
+                            <th scope="col" class="px-6 py-4 w-16">No</th>
                             <th scope="col" class="px-6 py-4">Waktu Rekam</th>
                             <th scope="col" class="px-6 py-4">Pengamat</th>
                             <th scope="col" class="px-6 py-4">Suhu (°C)</th>
@@ -48,6 +49,9 @@
                     <tbody>
                         @forelse($pendingRecords as $record)
                         <tr class="bg-white border-b border-gray-50 hover:bg-gray-50/50">
+                            <td class="px-6 py-4 text-gray-500">
+                                {{ $loop->iteration + $pendingRecords->firstItem() - 1 }}
+                            </td>
                             <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $record->recorded_at->format('d M Y') }}
                             </td>
@@ -71,7 +75,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                            <td colspan="8" class="px-6 py-8 text-center text-gray-500">
                                 Tidak ada data yang menunggu validasi.
                             </td>
                         </tr>

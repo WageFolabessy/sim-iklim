@@ -16,7 +16,12 @@ class CitizenReportController extends Controller
 {
     public function index(): View
     {
-        $reports = CitizenReport::latest()->paginate(15);
+        $reports = CitizenReport::query()
+            ->when(request('status'), fn ($q, $status) => $q->where('status', $status))
+            ->when(request('anomaly'), fn ($q, $anomaly) => $q->where('anomaly_type', $anomaly))
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.citizen-reports.index', compact('reports'));
     }

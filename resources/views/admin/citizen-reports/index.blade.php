@@ -134,15 +134,36 @@
     {{-- Citizen reports moderation card --}}
     <section aria-labelledby="reports-heading">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
-            <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
-                <h2 id="reports-heading" class="font-semibold text-gray-800">Moderasi Laporan Warga</h2>
-                <span class="text-xs text-gray-400">{{ $reports->total() }} laporan</span>
+            <div class="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 id="reports-heading" class="font-semibold text-gray-800">Moderasi Laporan Warga</h2>
+                    <span class="text-xs text-gray-400">{{ $reports->total() }} laporan</span>
+                </div>
+                
+                {{-- Filters --}}
+                <form method="GET" action="{{ route('admin.citizen-reports.index') }}" class="flex flex-wrap items-center gap-2">
+                    <select name="status" onchange="this.form.submit()" class="cursor-pointer text-sm border border-gray-300 bg-white shadow-sm rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 py-1.5 pl-3 pr-8">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu</option>
+                        <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Diterbitkan</option>
+                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                    </select>
+                    
+                    <select name="anomaly" onchange="this.form.submit()" class="cursor-pointer text-sm border border-gray-300 bg-white shadow-sm rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 py-1.5 pl-3 pr-8">
+                        <option value="">Semua Anomali</option>
+                        <option value="flood" {{ request('anomaly') === 'flood' ? 'selected' : '' }}>Banjir</option>
+                        <option value="drought" {{ request('anomaly') === 'drought' ? 'selected' : '' }}>Kekeringan</option>
+                        <option value="strong_wind" {{ request('anomaly') === 'strong_wind' ? 'selected' : '' }}>Angin Kencang</option>
+                        <option value="other" {{ request('anomaly') === 'other' ? 'selected' : '' }}>Lainnya</option>
+                    </select>
+                </form>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm">
                     <thead>
                         <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            <th class="px-6 py-3 w-16">No</th>
                             <th class="px-6 py-3">Pelapor</th>
                             <th class="px-6 py-3">Lokasi</th>
                             <th class="px-6 py-3">Jenis Anomali</th>
@@ -154,6 +175,9 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse ($reports as $report)
                             <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">
+                                    {{ $loop->iteration + $reports->firstItem() - 1 }}
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-700">
                                     {{ $report->reporter_name ?? '—' }}
                                 </td>
@@ -215,7 +239,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-12 text-center text-gray-400">
+                                <td colspan="7" class="px-6 py-12 text-center text-gray-400">
                                     Belum ada laporan dari warga.
                                 </td>
                             </tr>

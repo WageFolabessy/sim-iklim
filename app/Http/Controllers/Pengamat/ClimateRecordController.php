@@ -14,8 +14,10 @@ class ClimateRecordController extends Controller
     public function index(): View
     {
         $records = ClimateRecord::whereBelongsTo(auth()->user())
+            ->when(request('status'), fn ($q, $status) => $q->where('status', $status))
             ->latest('recorded_at')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return view('pengamat.climate-records.index', compact('records'));
     }

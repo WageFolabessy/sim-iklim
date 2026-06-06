@@ -165,25 +165,39 @@
     {{-- History card --}}
     <section aria-labelledby="history-heading">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
-            <div class="px-6 py-5 border-b border-gray-100">
+            <div class="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h2 id="history-heading" class="font-semibold text-gray-800">Riwayat Input Anda</h2>
+                
+                {{-- Filters --}}
+                <form method="GET" action="{{ route('pengamat.climate-records.index') }}" class="flex items-center">
+                    <select name="status" onchange="this.form.submit()" class="cursor-pointer text-sm border border-gray-300 bg-white shadow-sm rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 py-1.5 pl-3 pr-8">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu Validasi</option>
+                        <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Dipublikasikan</option>
+                    </select>
+                </form>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm">
                     <thead>
                         <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            <th class="px-6 py-3 w-16">No</th>
                             <th class="px-6 py-3">Tanggal</th>
                             <th class="px-6 py-3 text-right">Suhu (°C)</th>
                             <th class="px-6 py-3 text-right">Kelembapan (%)</th>
                             <th class="px-6 py-3 text-right">Curah Hujan (mm)</th>
                             <th class="px-6 py-3 text-right">Angin (km/j)</th>
+                            <th class="px-6 py-3">Status</th>
                             <th class="px-6 py-3">Dicatat</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @forelse ($records as $record)
                             <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">
+                                    {{ $loop->iteration + $records->firstItem() - 1 }}
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-700">
                                     {{ $record->recorded_at->translatedFormat('d M Y') }}
                                 </td>
@@ -199,13 +213,24 @@
                                 <td class="px-6 py-4 text-right text-gray-700 whitespace-nowrap">
                                     {{ number_format($record->wind_speed, 1) }}
                                 </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if ($record->status === 'published')
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                            Publik
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Menunggu
+                                        </span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4 text-gray-400 text-xs whitespace-nowrap">
                                     {{ $record->created_at->diffForHumans() }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-12 text-center text-gray-400">
+                                <td colspan="8" class="px-6 py-12 text-center text-gray-400">
                                     Belum ada data yang Anda inputkan.
                                 </td>
                             </tr>
