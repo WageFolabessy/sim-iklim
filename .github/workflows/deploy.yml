@@ -18,8 +18,12 @@ jobs:
           script: |
             cd /var/www/sim-iklim
             
-            # Tarik kode terbaru dari GitHub
-            git pull origin main
+            # Pastikan git tidak menolak karena perbedaan ownership
+            git config --global --add safe.directory /var/www/sim-iklim
+            
+            # Reset file lokal dan tarik kode terbaru dari GitHub
+            git fetch origin main
+            git reset --hard origin/main
             
             # Update dependencies
             composer install --no-dev --optimize-autoloader
@@ -30,8 +34,9 @@ jobs:
             php artisan migrate --force
             php artisan optimize
             
-            # Pastikan permission aman
-            chown -R www-data:www-data /var/www/sim-iklim
+            # Permission hanya untuk folder yang butuh write oleh web server
+            chown -R www-data:www-data /var/www/sim-iklim/storage
+            chown -R www-data:www-data /var/www/sim-iklim/bootstrap/cache
             
             # Restart services agar kode baru langsung aktif
             systemctl restart php8.4-fpm
