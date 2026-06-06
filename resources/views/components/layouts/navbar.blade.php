@@ -34,20 +34,22 @@
     </nav>
 
     {{-- Mobile Menu Drawer --}}
-    <div id="mobile-menu" class="hidden border-t border-border bg-background md:hidden">
-        <nav class="mx-auto flex max-w-7xl flex-col px-4 py-2">
-            <a href="{{ route('home') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
+    <div id="mobile-menu" class="hidden border-t border-border bg-background md:hidden shadow-lg pb-4">
+        <nav class="mx-auto flex flex-col space-y-1 px-4 py-3">
+            <a href="{{ route('home') }}" class="rounded-md px-3 py-3 text-sm font-medium transition-colors {{ request()->routeIs('home') ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary hover:text-foreground' }}">
                 Beranda
             </a>
-            <a href="{{ route('statistik') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
+            <a href="{{ route('statistik') }}" class="rounded-md px-3 py-3 text-sm font-medium transition-colors {{ request()->routeIs('statistik') ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary hover:text-foreground' }}">
                 Statistik
             </a>
-            <a href="{{ route('peringatan') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
+            <a href="{{ route('peringatan') }}" class="rounded-md px-3 py-3 text-sm font-medium transition-colors {{ request()->routeIs('peringatan') ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary hover:text-foreground' }}">
                 Peringatan
             </a>
-            <a href="{{ route('laporkan') }}" class="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary">
-                Lapor Cuaca
-            </a>
+            <div class="pt-2 mt-2 border-t border-border">
+                <a href="{{ route('laporkan') }}" class="flex w-full justify-center rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90">
+                    Kirim Laporan
+                </a>
+            </div>
         </nav>
     </div>
 </header>
