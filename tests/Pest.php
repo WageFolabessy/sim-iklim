@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,6 +18,11 @@ use Tests\TestCase;
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature');
+
+// Disable CSRF middleware for all Feature tests
+uses()->beforeEach(function () {
+    $this->withoutMiddleware(ValidateCsrfToken::class);
+})->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
