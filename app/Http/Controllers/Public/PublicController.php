@@ -33,9 +33,15 @@ class PublicController extends Controller
         return view('public.report');
     }
 
-    public function alerts(): View
+    public function alerts(\Illuminate\Http\Request $request): View
     {
-        $alerts = WeatherAlert::latest()->get();
+        $query = WeatherAlert::latest();
+
+        if ($request->has('level') && in_array($request->level, ['info', 'waspada', 'bahaya'])) {
+            $query->where('level', $request->level);
+        }
+
+        $alerts = $query->get();
 
         return view('public.alerts', compact('alerts'));
     }
