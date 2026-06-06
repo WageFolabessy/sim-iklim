@@ -48,27 +48,27 @@
 
         <x-layouts.topbar />
 
-        {{-- Flash messages --}}
-        @if (session('success'))
-            <div class="px-4 sm:px-6 pt-4">
-                <div class="bg-green-50 border border-green-200 text-green-800 rounded-xl px-4 py-3 text-sm flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                    </svg>
-                    {{ session('success') }}
+        {{-- Floating Toast Notifications --}}
+        @if (session('success') || session('error'))
+        <div id="flash-toast-admin" class="fixed bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-50 w-[calc(100%-2rem)] max-w-sm sm:w-auto">
+            <div class="flex items-start gap-3 rounded-2xl border p-4 shadow-xl backdrop-blur-lg transition-all duration-300
+                {{ session('success') ? 'bg-emerald-50/95 border-emerald-200 text-emerald-800' : 'bg-red-50/95 border-red-200 text-red-800' }}">
+                @if(session('success'))
+                <div class="shrink-0 grid h-8 w-8 place-items-center rounded-lg bg-emerald-100 text-emerald-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m4.5 12.75 6 6 9-13.5"/></svg>
                 </div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="px-4 sm:px-6 pt-4">
-                <div class="bg-red-50 border border-red-200 text-red-800 rounded-xl px-4 py-3 text-sm flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-                    </svg>
-                    {{ session('error') }}
+                @else
+                <div class="shrink-0 grid h-8 w-8 place-items-center rounded-lg bg-red-100 text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg>
                 </div>
+                @endif
+                <p class="flex-1 text-sm font-medium leading-snug">{{ session('success') ?? session('error') }}</p>
+                <button onclick="document.getElementById('flash-toast-admin').remove()" class="shrink-0 opacity-60 hover:opacity-100 transition cursor-pointer" aria-label="Tutup">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
             </div>
+        </div>
+        <script>setTimeout(function(){var t=document.getElementById('flash-toast-admin');if(t)t.remove();},5000);</script>
         @endif
 
         {{-- Page content --}}

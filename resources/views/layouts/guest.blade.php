@@ -37,7 +37,7 @@
 
     {{-- Floating Toast Notifications --}}
     @if (session('success') || session('error'))
-    <div id="flash-toast" class="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 z-50 max-w-sm w-full sm:w-auto">
+    <div id="flash-toast" class="fixed bottom-20 sm:bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-50 w-[calc(100%-2rem)] max-w-sm sm:w-auto">
         <div class="flex items-start gap-3 rounded-2xl border p-4 shadow-xl backdrop-blur-lg transition-all duration-300
             {{ session('success') ? 'bg-emerald-50/95 border-emerald-200 text-emerald-800' : 'bg-red-50/95 border-red-200 text-red-800' }}">
             @if(session('success'))
