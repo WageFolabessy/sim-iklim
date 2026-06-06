@@ -35,21 +35,27 @@
 
     <x-layouts.navbar />
 
-    {{-- Flash messages --}}
-    @if (session('success'))
-        <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4">
-            <div class="bg-green-50 border border-green-200 text-green-800 rounded-lg px-4 py-3 text-sm">
-                {{ session('success') }}
+    {{-- Floating Toast Notifications --}}
+    @if (session('success') || session('error'))
+    <div id="flash-toast" class="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 z-50 max-w-sm w-full sm:w-auto">
+        <div class="flex items-start gap-3 rounded-2xl border p-4 shadow-xl backdrop-blur-lg transition-all duration-300
+            {{ session('success') ? 'bg-emerald-50/95 border-emerald-200 text-emerald-800' : 'bg-red-50/95 border-red-200 text-red-800' }}">
+            @if(session('success'))
+            <div class="shrink-0 grid h-8 w-8 place-items-center rounded-lg bg-emerald-100 text-emerald-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4">
-            <div class="bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3 text-sm">
-                {{ session('error') }}
+            @else
+            <div class="shrink-0 grid h-8 w-8 place-items-center rounded-lg bg-red-100 text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg>
             </div>
+            @endif
+            <p class="flex-1 text-sm font-medium leading-snug">{{ session('success') ?? session('error') }}</p>
+            <button onclick="document.getElementById('flash-toast').remove()" class="shrink-0 opacity-60 hover:opacity-100 transition cursor-pointer" aria-label="Tutup">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
         </div>
+    </div>
+    <script>setTimeout(function(){var t=document.getElementById('flash-toast');if(t)t.remove();},5000);</script>
     @endif
 
     {{-- Main content --}}
