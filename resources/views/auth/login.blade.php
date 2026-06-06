@@ -9,8 +9,8 @@
     <title>Masuk — Website Informasi Iklim Interaktif BMKG Kalbar</title>
     <meta name="description" content="Masuk ke panel Website Informasi Iklim Interaktif BMKG Stasiun Klimatologi Kalimantan Barat.">
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/bmkg-logo.png" type="image/png">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <link rel="icon" href="{{ asset('bmkg-logo.png') }}" type="image/png">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

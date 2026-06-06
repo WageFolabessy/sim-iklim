@@ -12,7 +12,7 @@
 
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <link rel="apple-touch-icon" href="{{ asset('icons/icon.svg') }}">
-    <link rel="icon" href="/bmkg-logo.png" type="image/png">
+    <link rel="icon" href="{{ asset('bmkg-logo.png') }}" type="image/png">
 
     {{-- Open Graph / Facebook / WhatsApp --}}
     <meta property="og:type" content="website">

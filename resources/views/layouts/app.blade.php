@@ -9,8 +9,8 @@
     <title>@yield('title', 'Dasbor') — Website Informasi Iklim Interaktif BMKG Kalbar</title>
     <meta name="description" content="@yield('description', 'Sistem Informasi Monitoring Iklim BMKG Stasiun Klimatologi Kalimantan Barat')">
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/bmkg-logo.png" type="image/png">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <link rel="icon" href="{{ asset('bmkg-logo.png') }}" type="image/png">
 
     {{-- Open Graph / Facebook / WhatsApp --}}
     <meta property="og:type" content="website">
