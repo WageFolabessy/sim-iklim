@@ -20,22 +20,22 @@
 
             <div class="mt-8 flex flex-wrap items-center gap-2">
                 <span class="text-sm font-medium text-foreground mr-2">Filter Level:</span>
-                <a href="{{ route('alerts') }}"
+                <a href="{{ route('peringatan') }}"
                    class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
                    {{ !request()->has('level') ? 'bg-primary border-primary text-primary-foreground shadow-glow' : 'bg-background border-border text-muted-foreground hover:border-primary/50 hover:text-foreground' }}">
                     Semua
                 </a>
-                <a href="{{ route('alerts', ['level' => 'info']) }}"
+                <a href="{{ route('peringatan', ['level' => 'info']) }}"
                    class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
                    {{ request('level') === 'info' ? 'bg-info/20 border-info text-info shadow-sm' : 'bg-background border-border text-muted-foreground hover:border-info/50 hover:text-foreground' }}">
                     Info
                 </a>
-                <a href="{{ route('alerts', ['level' => 'waspada']) }}"
+                <a href="{{ route('peringatan', ['level' => 'waspada']) }}"
                    class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
                    {{ request('level') === 'waspada' ? 'bg-warning/20 border-warning text-warning-foreground shadow-sm' : 'bg-background border-border text-muted-foreground hover:border-warning/50 hover:text-foreground' }}">
                     Waspada
                 </a>
-                <a href="{{ route('alerts', ['level' => 'bahaya']) }}"
+                <a href="{{ route('peringatan', ['level' => 'bahaya']) }}"
                    class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors
                    {{ request('level') === 'bahaya' ? 'bg-destructive/20 border-destructive text-destructive shadow-sm' : 'bg-background border-border text-muted-foreground hover:border-destructive/50 hover:text-foreground' }}">
                     Bahaya
