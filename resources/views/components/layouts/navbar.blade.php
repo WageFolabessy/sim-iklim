@@ -21,6 +21,9 @@
             <a href="{{ route('peringatan') }}" class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground {{ request()->routeIs('peringatan') ? 'bg-secondary text-primary' : '' }}">
                 Peringatan
             </a>
+            <a href="{{ route('profil') }}" class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground {{ request()->routeIs('profil') ? 'bg-secondary text-primary' : '' }}">
+                Profil
+            </a>
             <a href="{{ route('laporkan') }}" class="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90">
                 Kirim Laporan
             </a>
@@ -44,6 +47,9 @@
             </a>
             <a href="{{ route('peringatan') }}" class="rounded-md px-3 py-3 text-sm font-medium transition-colors {{ request()->routeIs('peringatan') ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary hover:text-foreground' }}">
                 Peringatan
+            </a>
+            <a href="{{ route('profil') }}" class="rounded-md px-3 py-3 text-sm font-medium transition-colors {{ request()->routeIs('profil') ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary hover:text-foreground' }}">
+                Profil
             </a>
             <div class="pt-2 mt-2 border-t border-border">
                 <a href="{{ route('laporkan') }}" class="flex w-full justify-center rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90">

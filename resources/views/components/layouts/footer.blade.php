@@ -18,6 +18,8 @@
                     <li><a href="{{ route('statistik') }}" class="hover:text-foreground transition-colors">Data iklim & statistik</a></li>
                     <li><a href="{{ route('peringatan') }}" class="hover:text-foreground transition-colors">Peringatan dini cuaca ekstrem</a></li>
                     <li><a href="{{ route('laporkan') }}" class="hover:text-foreground transition-colors">Laporan cuaca warga</a></li>
+                    <li><a href="{{ route('profil') }}" class="hover:text-foreground transition-colors">Profil instansi</a></li>
+                    <li><a href="{{ route('login') }}" class="hover:text-foreground transition-colors">Login petugas</a></li>
                 </ul>
             </div>
         </div>

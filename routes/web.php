@@ -17,6 +17,7 @@ Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/statistik', [PublicController::class, 'statistics'])->name('statistik');
 Route::get('/laporkan', [PublicController::class, 'report'])->name('laporkan');
 Route::get('/peringatan', [PublicController::class, 'alerts'])->name('peringatan');
+Route::get('/profil', [PublicController::class, 'profil'])->name('profil');
 Route::post('/laporan-warga', [PublicController::class, 'storeCitizenReport'])
     ->middleware('throttle:3,1')
     ->name('citizen-reports.store');

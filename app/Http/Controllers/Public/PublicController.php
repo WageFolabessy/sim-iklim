@@ -59,6 +59,11 @@ class PublicController extends Controller
         return view('public.statistics', $stats);
     }
 
+    public function profil(): View
+    {
+        return view('public.profil');
+    }
+
     public function storeCitizenReport(StoreCitizenReportRequest $request): RedirectResponse
     {
         $report = CitizenReport::create($request->validated());
