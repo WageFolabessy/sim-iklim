@@ -45,6 +45,22 @@
     </section>
 
     <section class="mx-auto max-w-7xl space-y-4 px-4 py-12 sm:px-6">
+        {{-- Unsubscribe Push Notification UI --}}
+        <div id="unsubscribe-container" class="hidden mb-6 items-center justify-between rounded-xl border border-border bg-card p-4 shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-foreground">Notifikasi Aktif</h3>
+                    <p class="text-xs text-muted-foreground">Anda menerima peringatan instan.</p>
+                </div>
+            </div>
+            <button id="btn-unsubscribe" onclick="unsubscribePush()" class="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M18.36 6.64A9 9 0 0 1 20.77 15"/><path d="M6.16 6.16a9 9 0 1 0 12.68 12.68"/><path d="M12 2v4"/><path d="m2 2 20 20"/></svg>
+                Berhenti
+            </button>
+        </div>
         @forelse($alerts as $a)
             <article class="overflow-hidden rounded-xl border bg-card shadow-card {{ $a->level === 'bahaya' ? 'border-destructive/40' : ($a->level === 'waspada' ? 'border-warning/50' : 'border-info/40') }}">
                 <div class="h-1.5 {{ $a->level === 'bahaya' ? 'bg-destructive' : ($a->level === 'waspada' ? 'bg-warning' : 'bg-info') }}"></div>
@@ -66,5 +82,60 @@
             </div>
         @endforelse
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+
+            try {
+                const swReg = await navigator.serviceWorker.ready;
+                const subscription = await swReg.pushManager.getSubscription();
+
+                if (subscription) {
+                    const container = document.getElementById('unsubscribe-container');
+                    container.classList.remove('hidden');
+                    container.classList.add('flex');
+                }
+            } catch (error) {
+                console.error('Error checking subscription:', error);
+            }
+        });
+
+        async function unsubscribePush() {
+            const btn = document.getElementById('btn-unsubscribe');
+            btn.disabled = true;
+            btn.innerHTML = 'Memproses...';
+
+            try {
+                const swReg = await navigator.serviceWorker.ready;
+                const subscription = await swReg.pushManager.getSubscription();
+
+                if (subscription) {
+                    // Delete from backend
+                    await fetch('/push-unsubscribe', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ endpoint: subscription.endpoint })
+                    });
+
+                    // Unsubscribe from browser
+                    await subscription.unsubscribe();
+
+                    // Hide the UI
+                    const container = document.getElementById('unsubscribe-container');
+                    container.classList.add('hidden');
+                    container.classList.remove('flex');
+                }
+            } catch (error) {
+                console.error('Error unsubscribing:', error);
+                alert('Gagal berhenti berlangganan. Coba lagi.');
+                btn.disabled = false;
+                btn.innerHTML = 'Berhenti';
+            }
+        }
+    </script>
 </div>
 @endsection

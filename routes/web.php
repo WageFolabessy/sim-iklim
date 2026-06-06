@@ -23,6 +23,9 @@ Route::post('/laporan-warga', [PublicController::class, 'storeCitizenReport'])
 Route::post('/subscribe-push', [PublicController::class, 'subscribePush'])
     ->middleware('throttle:5,1')
     ->name('push.subscribe');
+Route::delete('/push-unsubscribe', [PublicController::class, 'unsubscribePush'])
+    ->middleware('throttle:5,1')
+    ->name('push.unsubscribe');
 Route::view('/offline', 'public.offline')->name('offline');
 // ---------------------------------------------------------------------------
 // Auth routes

@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -33,7 +34,7 @@ class PublicController extends Controller
         return view('public.report');
     }
 
-    public function alerts(\Illuminate\Http\Request $request): View
+    public function alerts(Request $request): View
     {
         $query = WeatherAlert::latest();
 
@@ -82,6 +83,19 @@ class PublicController extends Controller
             $request->input('keys.p256dh'),
             $request->input('keys.auth')
         );
+
+        return response()->json(['success' => true]);
+    }
+
+    public function unsubscribePush(Request $request): JsonResponse
+    {
+        $endpoint = $request->input('endpoint');
+
+        if ($endpoint) {
+            DB::table('push_subscriptions')
+                ->where('endpoint', $endpoint)
+                ->delete();
+        }
 
         return response()->json(['success' => true]);
     }
