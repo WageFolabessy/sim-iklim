@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#0ea5e9">
+    <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key') }}">
 
     <title>@yield('title', 'Informasi Iklim') — Website Informasi Iklim Interaktif BMKG Kalbar</title>
     <meta name="description" content="@yield('description', 'Informasi iklim terkini Kalimantan Barat dari BMKG Stasiun Klimatologi.')">
@@ -132,6 +133,107 @@
                     });
             });
         }
+    </script>
+
+    {{-- Global Push Notification Soft-Prompt Banner --}}
+    <div id="push-prompt-banner" class="fixed bottom-0 inset-x-0 z-50 hidden">
+        <div class="mx-auto max-w-2xl px-4 pb-4 sm:pb-6">
+            <div class="rounded-2xl border border-border/60 bg-card/95 p-4 shadow-xl backdrop-blur-lg sm:flex sm:items-center sm:gap-4">
+                <div class="flex items-start gap-3 sm:flex-1">
+                    <div class="shrink-0 grid h-10 w-10 place-items-center rounded-xl bg-primary/10 text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-sm font-semibold text-foreground">Peringatan Cuaca Ekstrem</p>
+                        <p class="mt-0.5 text-xs text-muted-foreground">Dapatkan peringatan dini cuaca ekstrem langsung di perangkat Anda.</p>
+                    </div>
+                </div>
+                <div class="mt-3 flex items-center gap-2 sm:mt-0 sm:shrink-0">
+                    <button id="push-prompt-dismiss" class="flex-1 sm:flex-none rounded-lg border border-border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:bg-secondary cursor-pointer">Nanti</button>
+                    <button id="push-prompt-activate" class="flex-1 sm:flex-none rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:opacity-90 cursor-pointer">Aktifkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Global Push Subscription Logic --}}
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var banner = document.getElementById('push-prompt-banner');
+        var btnActivate = document.getElementById('push-prompt-activate');
+        var btnDismiss = document.getElementById('push-prompt-dismiss');
+
+        if (!banner || !btnActivate || !btnDismiss) return;
+        if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) return;
+
+        var DISMISS_KEY = 'push_prompt_dismissed_at';
+        var DISMISS_DAYS = 3;
+
+        function shouldShowBanner() {
+            if (Notification.permission !== 'default') return false;
+            var dismissed = localStorage.getItem(DISMISS_KEY);
+            if (dismissed) {
+                var diff = Date.now() - parseInt(dismissed, 10);
+                if (diff < DISMISS_DAYS * 24 * 60 * 60 * 1000) return false;
+            }
+            return true;
+        }
+
+        function urlB64ToUint8Array(base64String) {
+            var padding = '='.repeat((4 - base64String.length % 4) % 4);
+            var base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+            var rawData = window.atob(base64);
+            var outputArray = new Uint8Array(rawData.length);
+            for (var i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+
+        async function subscribeToPush() {
+            try {
+                var permission = await Notification.requestPermission();
+                if (permission !== 'granted') return;
+
+                var vapidKey = document.querySelector('meta[name="vapid-public-key"]');
+                if (!vapidKey) return;
+
+                var swReg = await navigator.serviceWorker.ready;
+                var subscription = await swReg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlB64ToUint8Array(vapidKey.content)
+                });
+
+                var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+                await fetch('{{ route('push.subscribe') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfMeta ? csrfMeta.content : ''
+                    },
+                    body: JSON.stringify(subscription)
+                });
+            } catch (err) {
+                console.error('Push subscription failed:', err);
+            }
+        }
+
+        if (shouldShowBanner()) {
+            setTimeout(function () {
+                banner.classList.remove('hidden');
+            }, 2000);
+        }
+
+        btnActivate.addEventListener('click', function () {
+            banner.classList.add('hidden');
+            subscribeToPush();
+        });
+
+        btnDismiss.addEventListener('click', function () {
+            banner.classList.add('hidden');
+            localStorage.setItem(DISMISS_KEY, Date.now().toString());
+        });
+    });
     </script>
 </body>
 </html>

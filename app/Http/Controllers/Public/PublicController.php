@@ -36,9 +36,8 @@ class PublicController extends Controller
     public function alerts(): View
     {
         $alerts = WeatherAlert::latest()->get();
-        $vapidPublicKey = config('webpush.vapid.public_key');
 
-        return view('public.alerts', compact('alerts', 'vapidPublicKey'));
+        return view('public.alerts', compact('alerts'));
     }
 
     public function statistics(): View
@@ -46,7 +45,7 @@ class PublicController extends Controller
         $stats = Cache::get('climate_statistics');
 
         if (! $stats) {
-            \Illuminate\Support\Facades\Artisan::call('climate:calculate-stats');
+            Artisan::call('climate:calculate-stats');
             $stats = Cache::get('climate_statistics');
         }
 
