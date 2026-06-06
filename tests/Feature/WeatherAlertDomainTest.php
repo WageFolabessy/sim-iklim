@@ -30,7 +30,7 @@ it('allows admin to trigger a weather alert, saves it, and dispatches notificati
 
     $this->actingAs($admin)
         ->post(route('admin.weather-alerts.trigger'), [
-            'level' => 'bahaya',
+            'level' => 'awas',
             'title' => 'Banjir Besar Kalimantan Barat',
             'area' => 'Pontianak dan sekitarnya',
             'body' => 'Curah hujan ekstrem diprediksi terjadi dalam 24 jam ke depan.',
@@ -39,7 +39,7 @@ it('allows admin to trigger a weather alert, saves it, and dispatches notificati
         ->assertRedirect();
 
     $this->assertDatabaseHas('weather_alerts', [
-        'level' => 'bahaya',
+        'level' => 'awas',
         'title' => 'Banjir Besar Kalimantan Barat',
     ]);
 
@@ -55,7 +55,7 @@ it('blocks pengamat from triggering weather alerts', function (): void {
 
     $this->actingAs($pengamat)
         ->post(route('admin.weather-alerts.trigger'), [
-            'level' => 'info',
+            'level' => 'waspada',
             'title' => 'Uji Coba',
             'area' => 'Test',
             'body' => 'Ini seharusnya diblokir.',
