@@ -26,8 +26,7 @@
         </div>
 
         <div class="flex flex-col-reverse sm:flex-row gap-4 sm:gap-2 items-center justify-between w-full">
-
-            <div class="self-start sm:self-auto">
+            <div class="text-center sm:text-left">
                 <p class="text-sm text-gray-700 leading-5 dark:text-gray-600">
                     {!! __('Showing') !!}
                     @if ($paginator->firstItem())
@@ -43,7 +42,7 @@
                 </p>
             </div>
 
-            <div class="max-w-full overflow-x-auto pb-2 sm:pb-0 self-end sm:self-auto">
+            <div class="max-w-full overflow-x-auto pb-2 sm:pb-0">
                 <span class="inline-flex rtl:flex-row-reverse shadow-sm rounded-md">
 
                     {{-- Previous Page Link --}}
