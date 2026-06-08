@@ -42,7 +42,7 @@ class PublicController extends Controller
             $query->where('level', $request->level);
         }
 
-        $alerts = $query->get();
+        $alerts = $query->paginate(10)->withQueryString();
 
         return view('public.alerts', compact('alerts'));
     }

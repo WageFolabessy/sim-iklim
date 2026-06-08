@@ -4,9 +4,9 @@
 <div class="min-h-screen bg-background">
     <section class="border-b border-border bg-surface">
         <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-            @if($alerts->count() > 0)
+            @if($alerts->total() > 0)
             <div class="inline-flex items-center gap-2 rounded-full border border-destructive/30 bg-destructive/10 px-3 py-1 text-xs font-semibold text-destructive">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> {{ $alerts->count() }} peringatan aktif
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> {{ $alerts->total() }} peringatan aktif
             </div>
             @else
             <div class="inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-3 py-1 text-xs font-semibold text-success">
@@ -83,6 +83,12 @@
                 Tidak ada peringatan cuaca ekstrem saat ini.
             </div>
         @endforelse
+
+        @if($alerts->hasPages())
+            <div class="mt-8">
+                {{ $alerts->links() }}
+            </div>
+        @endif
     </section>
 
     <script>
