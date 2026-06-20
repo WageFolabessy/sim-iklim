@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\ClimateRecord;
+use App\Services\HoltWintersService;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -61,6 +63,49 @@ class CalculateClimateStatistics extends Command
             $rainData[] = round($monthlyRainfall[$i] ?? 0, 1);
         }
 
+        // --- Holt-Winters Forecasting ---
+        // Fetch chronological data for Holt-Winters (requires actual time-series without gaps)
+        $records = ClimateRecord::where('status', 'published')
+            ->selectRaw('YEAR(recorded_at) as year, MONTH(recorded_at) as month, AVG(rainfall) as avg_rain')
+            ->groupBy('year', 'month')
+            ->get();
+
+        $minDate = $query->min('recorded_at');
+        $maxDate = $query->max('recorded_at');
+
+        $historicalTimeSeries = [];
+        $forecastMonths = [];
+
+        if ($minDate && $maxDate) {
+            $start = Carbon::parse($minDate)->startOfMonth();
+            $end = Carbon::parse($maxDate)->startOfMonth();
+
+            $rainfallDict = [];
+            foreach ($records as $rec) {
+                $rainfallDict[$rec->year.'-'.str_pad($rec->month, 2, '0', STR_PAD_LEFT)] = (float) $rec->avg_rain;
+            }
+
+            $current = $start->copy();
+            while ($current->lte($end)) {
+                $key = $current->format('Y-m');
+                // Isi bulan yang kosong dengan 0 agar sequence periodik tidak rusak
+                $historicalTimeSeries[] = $rainfallDict[$key] ?? 0.0;
+                $current->addMonth();
+            }
+
+            // Determine the names of the forecasted months based on real chronological end date
+            for ($i = 1; $i <= 3; $i++) {
+                $next = $end->copy()->addMonths($i);
+                $forecastMonths[] = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'][$next->month - 1].' (Prediksi)';
+            }
+        } else {
+            $forecastMonths = ['Bulan 1 (Prediksi)', 'Bulan 2 (Prediksi)', 'Bulan 3 (Prediksi)'];
+        }
+
+        $holtWinters = new HoltWintersService;
+        // Predict for the next 3 months
+        $forecastRainData = $holtWinters->forecast($historicalTimeSeries, 12, 3);
+
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
         $minDate = $query->min('recorded_at');
@@ -78,7 +123,7 @@ class CalculateClimateStatistics extends Command
             'humidityAvg', 'humidityMin', 'humidityMax', 'humidityStddev',
             'rainfallAvg', 'rainfallMin', 'rainfallMax', 'rainfallStddev',
             'windAvg', 'windMin', 'windMax', 'windStddev',
-            'rainData', 'months', 'yearSpan'
+            'rainData', 'months', 'yearSpan', 'forecastRainData', 'forecastMonths'
         );
 
         Cache::put('climate_statistics', $dataArray, now()->addDays(1));

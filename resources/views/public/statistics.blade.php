@@ -143,7 +143,9 @@
             </div>
             
             @php
-                $maxRain = !empty($rainData) ? max($rainData) : 1;
+                $historicalMax = !empty($rainData) ? max($rainData) : 0;
+                $forecastMax = (isset($forecastRainData) && !empty($forecastRainData)) ? max($forecastRainData) : 0;
+                $maxRain = max($historicalMax, $forecastMax);
                 $maxRain = $maxRain > 0 ? $maxRain : 1; // absolute fallback
                 $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
             @endphp
@@ -161,6 +163,23 @@
                         <div class="text-[10px] text-muted-foreground">{{ $months[$index] }}</div>
                     </div>
                 @endforeach
+                
+                {{-- Forecast Data --}}
+                @if(isset($forecastRainData) && count($forecastRainData) > 0)
+                    <div class="my-auto h-4/5 w-px border-l-2 border-dashed border-border mx-1"></div>
+                    @foreach($forecastRainData as $index => $v)
+                        <div class="group flex h-full flex-1 flex-col items-center gap-2 opacity-80">
+                            <div class="relative w-full flex-1">
+                                <div
+                                    class="absolute bottom-0 w-full rounded-t-md border-2 border-dashed border-primary bg-primary/20 transition group-hover:opacity-80"
+                                    style="height: {{ ($v / $maxRain) * 100 }}%;"
+                                    title="Prediksi: {{ $v }} mm"
+                                ></div>
+                            </div>
+                            <div class="text-[10px] font-semibold text-primary">{{ $forecastMonths[$index] ?? 'Bulan ' . ($index+1) }}</div>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </section>
