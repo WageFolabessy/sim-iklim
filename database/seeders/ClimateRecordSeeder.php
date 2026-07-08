@@ -24,8 +24,9 @@ class ClimateRecordSeeder extends Seeder
                 'recorded_at' => (clone $now)->subDays($i)->format('Y-m-d'),
                 'temperature' => round(rand(260, 350) / 10, 2),
                 'humidity' => rand(65, 100),
-                'rainfall' => rand(1, 10) > 7 ? round(rand(10, 1000) / 10, 2) : 0,
+                'rainfall' => rand(1, 10) > 4 ? round(rand(20, 1500) / 10, 2) : 0,
                 'wind_speed' => round(rand(20, 200) / 10, 2),
+                'status' => 'published',
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
