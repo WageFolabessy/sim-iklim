@@ -137,8 +137,20 @@
         <div class="mt-8 rounded-xl border border-border bg-card p-6 shadow-card">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="font-display text-lg font-bold">Curah Hujan Bulanan</h2>
-                    <p class="text-xs text-muted-foreground">Rata-rata curah hujan bulanan, satuan mm</p>
+                    <h2 class="font-display text-lg font-bold text-foreground">Curah Hujan Bulanan</h2>
+                    <p class="text-xs text-muted-foreground">Rata-rata curah hujan bulanan, dalam satuan milimeter (mm)</p>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="mt-4 flex flex-wrap items-center gap-4 text-xs">
+                <div class="flex items-center gap-1.5">
+                    <span class="inline-block h-3 w-5 rounded bg-gradient-sky animate-pulse-slow"></span>
+                    <span class="text-muted-foreground font-medium">Data Historis Aktual (Jan - Jul)</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="inline-block h-3 w-5 rounded border border-dashed border-primary bg-primary/10"></span>
+                    <span class="text-primary font-bold">Prediksi Holt-Winters (Agu - Okt)</span>
                 </div>
             </div>
             
@@ -148,38 +160,93 @@
                 $maxRain = max($historicalMax, $forecastMax);
                 $maxRain = $maxRain > 0 ? $maxRain : 1; // absolute fallback
                 $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+                // Build unified timeline
+                $lastActualIndex = -1;
+                foreach ($rainData as $index => $val) {
+                    if ($val > 0) {
+                        $lastActualIndex = $index;
+                    }
+                }
+
+                $unifiedChartData = [];
+                for ($i = 0; $i < 12; $i++) {
+                    $val = $rainData[$i] ?? 0;
+                    $type = 'actual';
+                    $label = $months[$i];
+
+                    if ($i > $lastActualIndex && isset($forecastRainData)) {
+                        $forecastIdx = $i - $lastActualIndex - 1;
+                        if ($forecastIdx >= 0 && $forecastIdx < count($forecastRainData)) {
+                            $val = $forecastRainData[$forecastIdx];
+                            $type = 'forecast';
+                            $label = $months[$i] . ' (Prediksi)';
+                        }
+                    }
+
+                    $unifiedChartData[] = [
+                        'value' => $val,
+                        'type' => $type,
+                        'label' => $label,
+                    ];
+                }
             @endphp
             
-            <div class="mt-6 flex h-56 items-end gap-2">
-                @foreach($rainData as $index => $v)
-                    <div class="group flex h-full flex-1 flex-col items-center gap-2">
-                        <div class="relative w-full flex-1">
-                            <div
-                                class="absolute bottom-0 w-full rounded-t-md bg-gradient-sky transition group-hover:opacity-80"
-                                style="height: {{ ($v / $maxRain) * 100 }}%;"
-                                title="{{ $v }} mm"
-                            ></div>
-                        </div>
-                        <div class="text-[10px] text-muted-foreground">{{ $months[$index] }}</div>
-                    </div>
-                @endforeach
-                
-                {{-- Forecast Data --}}
-                @if(isset($forecastRainData) && count($forecastRainData) > 0)
-                    <div class="my-auto h-4/5 w-px border-l-2 border-dashed border-border mx-1"></div>
-                    @foreach($forecastRainData as $index => $v)
-                        <div class="group flex h-full flex-1 flex-col items-center gap-2 opacity-80">
-                            <div class="relative w-full flex-1">
-                                <div
-                                    class="absolute bottom-0 w-full rounded-t-md border-2 border-dashed border-primary bg-primary/20 transition group-hover:opacity-80"
-                                    style="height: {{ ($v / $maxRain) * 100 }}%;"
-                                    title="Prediksi: {{ $v }} mm"
-                                ></div>
+            <!-- Chart Container -->
+            <div class="relative mt-8 pt-8 pb-4">
+                <!-- Horizontal Grid Lines -->
+                <div class="absolute inset-x-0 top-8 bottom-12 flex flex-col justify-between pointer-events-none">
+                    <div class="w-full border-t border-dashed border-border/40"></div>
+                    <div class="w-full border-t border-dashed border-border/40"></div>
+                    <div class="w-full border-t border-dashed border-border/40"></div>
+                    <div class="w-full border-t border-dashed border-border/40"></div>
+                </div>
+
+                <!-- Bars -->
+                <div class="relative z-10 flex h-60 items-end gap-3 px-1">
+                    @foreach($unifiedChartData as $item)
+                        @php
+                            $val = $item['value'];
+                            $isForecast = $item['type'] === 'forecast';
+                            $hasVal = $val > 0;
+                        @endphp
+                        <div class="group flex h-full flex-1 flex-col items-center gap-2">
+                            <div class="relative w-full flex-1 flex flex-col justify-end">
+                                <!-- Value Label Floating Above Bar -->
+                                @if($hasVal)
+                                    <div class="absolute w-full text-center text-[10px] font-bold tracking-tight transition-all duration-200 group-hover:scale-110 {{ $isForecast ? 'text-primary' : 'text-sky-700 dark:text-sky-400' }}"
+                                         style="bottom: calc({{ ($val / $maxRain) * 100 }}% + 4px);">
+                                        {{ number_format($val, 1) }}
+                                    </div>
+                                @endif
+                                
+                                <!-- The Bar -->
+                                @if($hasVal)
+                                    @if($isForecast)
+                                        <div
+                                            class="w-full rounded-t-md border border-dashed border-primary bg-primary/10 transition-all duration-300 group-hover:bg-primary/20 group-hover:shadow-lg"
+                                            style="height: {{ ($val / $maxRain) * 100 }}%;"
+                                            title="Prediksi: {{ $val }} mm"
+                                        ></div>
+                                    @else
+                                        <div
+                                            class="w-full rounded-t-md bg-gradient-sky transition-all duration-300 group-hover:opacity-90 group-hover:shadow-md"
+                                            style="height: {{ ($val / $maxRain) * 100 }}%;"
+                                            title="{{ $val }} mm"
+                                        ></div>
+                                    @endif
+                                @else
+                                    <!-- Empty Placeholder Bar for clean UI -->
+                                    <div class="w-full h-1 bg-border/40 rounded-full"></div>
+                                @endif
                             </div>
-                            <div class="text-[10px] font-semibold text-primary">{{ $forecastMonths[$index] ?? 'Bulan ' . ($index+1) }}</div>
+                            <!-- Month Label -->
+                            <div class="text-[10px] font-semibold transition-all duration-200 {{ $isForecast ? 'text-primary' : 'text-muted-foreground' }}">
+                                {{ $item['label'] }}
+                            </div>
                         </div>
                     @endforeach
-                @endif
+                </div>
             </div>
         </div>
     </section>
