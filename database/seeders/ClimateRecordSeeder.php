@@ -16,12 +16,13 @@ class ClimateRecordSeeder extends Seeder
     {
         $pengamatId = User::where('role', 'pengamat')->value('id') ?? 1;
         $records = [];
-        $now = Carbon::now()->startOfDay();
+        $start = Carbon::now()->startOfYear();
+        $end = Carbon::now()->startOfDay();
 
-        for ($i = 365; $i >= 0; $i--) {
+        while ($start->lte($end)) {
             $records[] = [
                 'user_id' => $pengamatId,
-                'recorded_at' => (clone $now)->subDays($i)->format('Y-m-d'),
+                'recorded_at' => $start->format('Y-m-d'),
                 'temperature' => round(rand(260, 350) / 10, 2),
                 'humidity' => rand(65, 100),
                 'rainfall' => rand(1, 10) > 4 ? round(rand(20, 1500) / 10, 2) : 0,
@@ -30,6 +31,7 @@ class ClimateRecordSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
+            $start->addDay();
         }
 
         foreach (array_chunk($records, 100) as $chunk) {
